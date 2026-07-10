@@ -85,7 +85,7 @@ function ShopsPage() {
         q={qInput}
         setQ={setQInput}
         onSubmit={(value) =>
-          navigate({ search: (prev) => ({ ...prev, q: value }) })
+          navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, q: value }) })
         }
       />
 
@@ -98,7 +98,7 @@ function ShopsPage() {
               area={area}
               sort={sort}
               onChange={(patch) =>
-                navigate({ search: (prev) => ({ ...prev, ...patch }) })
+                navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, ...patch }) })
               }
               onClear={() =>
                 navigate({ search: () => ({ q: "", category: "", area: "", sort: "featured" }) })
@@ -127,7 +127,7 @@ function ShopsPage() {
                   category={category}
                   area={area}
                   onClear={(key) =>
-                    navigate({ search: (prev) => ({ ...prev, [key]: "" }) })
+                    navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, [key]: "" }) })
                   }
                 />
               </div>
@@ -137,7 +137,7 @@ function ShopsPage() {
                   value={sort}
                   onChange={(e) =>
                     navigate({
-                      search: (prev) => ({ ...prev, sort: e.target.value }),
+                      search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, sort: e.target.value }),
                     })
                   }
                   className="rounded-sm border border-border bg-card px-2 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -185,7 +185,7 @@ function ShopsPage() {
               area={area}
               sort={sort}
               onChange={(patch) =>
-                navigate({ search: (prev) => ({ ...prev, ...patch }) })
+                navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, ...patch }) })
               }
               onClear={() =>
                 navigate({ search: () => ({ q: "", category: "", area: "", sort: "featured" }) })
