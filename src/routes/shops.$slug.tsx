@@ -83,9 +83,6 @@ function ShopDetailPage() {
   const { shop } = Route.useLoaderData();
   const [activeIdx, setActiveIdx] = useState(0);
 
-  const related = shops
-    .filter((s) => s.category === shop.category && s.slug !== shop.slug)
-    .slice(0, 3);
 
   const mapQuery = encodeURIComponent(`${shop.name}, ${shop.address}`);
   const mapEmbed = `https://www.google.com/maps?q=${mapQuery}&output=embed`;
