@@ -21,8 +21,6 @@ import {
   Compass,
   MousePointerClick,
   PhoneCall,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import {
   heroImages,
@@ -32,6 +30,7 @@ import {
   about,
   socials,
 } from "@/data/home";
+import { FeaturedShops } from "@/components/FeaturedShops";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -275,142 +274,28 @@ function CategoryChips() {
 }
 
 function Featured() {
-  const PAGE_SIZE = 6;
-  const [page, setPage] = useState(1);
-  const totalPages = Math.max(1, Math.ceil(featuredShops.length / PAGE_SIZE));
-  const start = (page - 1) * PAGE_SIZE;
-  const pageItems = featuredShops.slice(start, start + PAGE_SIZE);
+  const items = featuredShops.map((s) => ({
+    slug: s.slug,
+    name: s.name,
+    categoryLabel: s.category,
+    area: s.area,
+    image: s.image,
+    whatsapp: s.whatsapp,
+    phone: s.phone,
+    featured: true,
+  }));
 
   return (
-    <section className="border-t border-border bg-secondary/40 px-6 py-16 sm:py-20">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex items-end justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              Handpicked this week
-            </p>
-            <h2 className="mt-1 font-display text-3xl font-semibold sm:text-4xl">
-              Featured in Kohat
-            </h2>
-          </div>
-          <a
-            href="/shops"
-            className="hidden text-sm font-medium text-primary underline-offset-4 hover:underline sm:inline"
-          >
-            See all shops →
-          </a>
-        </div>
-
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {pageItems.map((s) => (
-            <article
-              key={s.slug}
-              className="group flex flex-col overflow-hidden rounded-sm border border-border bg-card transition hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_oklch(0.22_0.03_45_/_0.35)]"
-            >
-              <a href={`/shops/${s.slug}`} className="relative block overflow-hidden">
-                <img
-                  src={s.image}
-                  alt={s.name}
-                  width={900}
-                  height={700}
-                  loading="lazy"
-                  className="aspect-[4/3] w-full object-cover transition duration-700 group-hover:scale-105"
-                />
-                <span className="absolute left-3 top-3 rounded-sm bg-background/95 px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-foreground">
-                  {s.category}
-                </span>
-              </a>
-              <div className="flex flex-1 flex-col gap-4 p-5">
-                <div>
-                  <a
-                    href={`/shops/${s.slug}`}
-                    className="font-display text-xl font-semibold text-foreground transition hover:text-primary"
-                  >
-                    {s.name}
-                  </a>
-                  <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <MapPin className="h-3.5 w-3.5" />
-                    {s.area}
-                  </p>
-                </div>
-                <div className="mt-auto flex items-center gap-2 border-t border-border pt-4">
-                  <a
-                    href={`https://wa.me/${s.whatsapp.replace(/\D/g, "")}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-sm bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-                  >
-                    <MessageCircle className="h-4 w-4" />
-                    WhatsApp
-                  </a>
-                  <a
-                    href={`tel:${s.phone}`}
-                    className="inline-flex items-center justify-center gap-2 rounded-sm border border-border bg-background px-3 py-2 text-sm font-medium text-foreground transition hover:border-primary/40 hover:text-primary"
-                    aria-label={`Call ${s.name}`}
-                  >
-                    <Phone className="h-4 w-4" />
-                    Call
-                  </a>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {totalPages > 1 && (
-          <nav
-            aria-label="Featured shops pagination"
-            className="mt-10 flex items-center justify-between gap-4 border-t border-border pt-6"
-          >
-            <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-              Showing <span className="text-foreground">{start + 1}</span>–
-              <span className="text-foreground">
-                {Math.min(start + PAGE_SIZE, featuredShops.length)}
-              </span>{" "}
-              of <span className="text-foreground">{featuredShops.length}</span>
-            </p>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                aria-label="Previous page"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-border bg-card text-foreground transition hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:text-foreground"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
-                const active = n === page;
-                return (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setPage(n)}
-                    aria-current={active ? "page" : undefined}
-                    className={`inline-flex h-9 min-w-9 items-center justify-center rounded-sm border px-3 text-sm font-medium transition ${
-                      active
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-card text-foreground hover:border-primary/40 hover:text-primary"
-                    }`}
-                  >
-                    {n}
-                  </button>
-                );
-              })}
-              <button
-                type="button"
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                aria-label="Next page"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-border bg-card text-foreground transition hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:text-foreground"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </div>
-          </nav>
-        )}
-      </div>
-    </section>
+    <FeaturedShops
+      className="bg-secondary/40"
+      eyebrow="Handpicked this week"
+      title="Featured in Kohat"
+      description=""
+      items={items}
+      showLink
+      linkHref="/shops"
+      linkLabel="See all shops →"
+    />
   );
 }
 

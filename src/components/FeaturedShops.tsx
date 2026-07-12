@@ -1,11 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
 import { MessageCircle, Phone, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { shops, type Shop } from "@/data/shops";
+import { shops } from "@/data/shops";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export function ShopCard({ shop: s }: { shop: Shop }) {
+export interface ShopCardItem {
+  slug: string;
+  name: string;
+  categoryLabel: string;
+  area: string;
+  image: string;
+  whatsapp: string;
+  phone: string;
+  tagline?: string;
+  featured?: boolean;
+}
+
+export function ShopCard({ shop: s }: { shop: ShopCardItem }) {
   return (
     <article className="group flex flex-col overflow-hidden rounded-sm border border-border bg-card transition hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_oklch(0.22_0.03_45_/_0.35)]">
       <Link
@@ -44,7 +56,9 @@ export function ShopCard({ shop: s }: { shop: Shop }) {
             {s.area}
           </p>
         </div>
-        <p className="line-clamp-2 text-xs text-muted-foreground sm:text-sm">{s.tagline}</p>
+        {s.tagline && (
+          <p className="line-clamp-2 text-xs text-muted-foreground sm:text-sm">{s.tagline}</p>
+        )}
         <div className="mt-auto flex items-center gap-2 border-t border-border pt-3 sm:pt-4">
           <a
             href={`https://wa.me/${s.whatsapp.replace(/\D/g, "")}`}
@@ -131,15 +145,34 @@ export function Pagination({
   );
 }
 
-export function FeaturedShops({ className }: { className?: string }) {
-  const featured = useMemo(() => shops.filter((s) => s.featured), []);
+export function FeaturedShops({
+  className,
+  title = "Featured shops in Kohat",
+  eyebrow = "Handpicked",
+  description = "Local favourites worth a visit — vetted by us, loved by the city.",
+  items,
+  showLink = false,
+  linkHref = "/shops",
+  linkLabel = "See all shops →",
+}: {
+  className?: string;
+  title?: string;
+  eyebrow?: string;
+  description?: string;
+  items?: ShopCardItem[];
+  showLink?: boolean;
+  linkHref?: string;
+  linkLabel?: string;
+}) {
+  const defaultItems = useMemo(() => shops.filter((s) => s.featured), []);
+  const source = items ?? defaultItems;
   const isMobile = useIsMobile();
   const PAGE_SIZE = isMobile ? 3 : 8;
   const [page, setPage] = useState(1);
-  const totalPages = Math.max(1, Math.ceil(featured.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(source.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const start = (currentPage - 1) * PAGE_SIZE;
-  const pageItems = featured.slice(start, start + PAGE_SIZE);
+  const pageItems = source.slice(start, start + PAGE_SIZE);
 
   useEffect(() => {
     setPage(1);
@@ -148,16 +181,26 @@ export function FeaturedShops({ className }: { className?: string }) {
   return (
     <section className={cn("border-t border-border bg-background px-6 py-12 sm:py-16", className)}>
       <div className="mx-auto max-w-7xl">
-        <div className="mb-6 sm:mb-8">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            Handpicked
-          </p>
-          <h2 className="mt-2 font-display text-xl font-semibold sm:text-3xl">
-            Featured shops in Kohat
-          </h2>
-          <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-            Local favourites worth a visit — vetted by us, loved by the city.
-          </p>
+        <div className="mb-6 flex items-end justify-between sm:mb-8">
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              {eyebrow}
+            </p>
+            <h2 className="mt-2 font-display text-xl font-semibold sm:text-3xl">
+              {title}
+            </h2>
+            <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+              {description}
+            </p>
+          </div>
+          {showLink && (
+            <a
+              href={linkHref}
+              className="hidden text-sm font-medium text-primary underline-offset-4 hover:underline sm:inline"
+            >
+              {linkLabel}
+            </a>
+          )}
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 2xl:grid-cols-4">
@@ -171,7 +214,7 @@ export function FeaturedShops({ className }: { className?: string }) {
           totalPages={totalPages}
           start={start}
           count={pageItems.length}
-          total={featured.length}
+          total={source.length}
           onChange={setPage}
         />
       </div>
