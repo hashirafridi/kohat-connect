@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { MessageCircle, Phone, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { shops, type Shop } from "@/data/shops";
+import { cn } from "@/lib/utils";
 
 export function ShopCard({ shop: s }: { shop: Shop }) {
   return (
