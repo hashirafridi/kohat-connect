@@ -609,8 +609,8 @@ function Footer() {
           <ul className="space-y-2 text-primary-foreground/80">
             <li><a href="/shops" className="hover:text-accent">All Shops</a></li>
             <li><a href="/shops#restaurants" className="hover:text-accent">Restaurants</a></li>
-            <li><a href="/shops#bikes" className="hover:text-accent">Bikes &amp; Motors</a></li>
-            <li><a href="/shops#furniture" className="hover:text-accent">Furniture</a></li>
+            <li><a href="/about" className="hover:text-accent">About Us</a></li>
+            <li><a href="/contact" className="hover:text-accent">Contact Us</a></li>
           </ul>
         </div>
         <div className="text-sm">
