@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShopsIndexRouteImport } from './routes/shops.index'
 import { Route as ShopsSlugRouteImport } from './routes/shops.$slug'
 
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +37,47 @@ const ShopsSlugRoute = ShopsSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/shops/$slug': typeof ShopsSlugRoute
   '/shops/': typeof ShopsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/shops/$slug': typeof ShopsSlugRoute
   '/shops': typeof ShopsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/shops/$slug': typeof ShopsSlugRoute
   '/shops/': typeof ShopsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/shops/$slug' | '/shops/'
+  fullPaths: '/' | '/about' | '/shops/$slug' | '/shops/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/shops/$slug' | '/shops'
-  id: '__root__' | '/' | '/shops/$slug' | '/shops/'
+  to: '/' | '/about' | '/shops/$slug' | '/shops'
+  id: '__root__' | '/' | '/about' | '/shops/$slug' | '/shops/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   ShopsSlugRoute: typeof ShopsSlugRoute
   ShopsIndexRoute: typeof ShopsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   ShopsSlugRoute: ShopsSlugRoute,
   ShopsIndexRoute: ShopsIndexRoute,
 }
