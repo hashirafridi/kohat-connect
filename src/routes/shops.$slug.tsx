@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { getShopBySlug, shops } from "@/data/shops";
 import { socials } from "@/data/home";
+import { FeaturedShops } from "@/components/FeaturedShops";
 
 export const Route = createFileRoute("/shops/$slug")({
   loader: ({ params }) => {
