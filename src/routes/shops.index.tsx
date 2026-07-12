@@ -775,7 +775,7 @@ function MapSection({ shops: list }: { shops: Shop[] }) {
   }, []);
 
   return (
-    <section className="border-t border-border bg-secondary/40 px-6 py-16">
+    <section id="shops-map" className="border-t border-border bg-secondary/40 px-6 py-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
