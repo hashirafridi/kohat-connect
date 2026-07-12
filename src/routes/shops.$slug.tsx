@@ -253,7 +253,7 @@ function ShopDetailPage() {
               </Link>
             </div>
             <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((s) => (
+              {related.map((s: Shop) => (
                 <RelatedCard key={s.slug} shop={s} />
               ))}
             </div>
