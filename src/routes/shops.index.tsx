@@ -381,6 +381,9 @@ function Filters({
   onChange: (patch: Partial<{ category: string; area: string; sort: string }>) => void;
   onClear: () => void;
 }) {
+  const scrollToMap = () =>
+    document.getElementById("shops-map")?.scrollIntoView({ behavior: "smooth", block: "start" });
+
   return (
     <div className="space-y-8">
       <div>
