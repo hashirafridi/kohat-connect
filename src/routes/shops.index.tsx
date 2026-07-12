@@ -80,7 +80,7 @@ function ShopsPage() {
       );
     }
     return list;
-  }, [q, category, area, sort]);
+  }, [q, category, area, sort, shops]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
