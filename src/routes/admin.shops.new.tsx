@@ -119,10 +119,16 @@ function CreateShopPage() {
 
   async function handleGallery(files: FileList | null) {
     if (!files || files.length === 0) return;
+    const remaining = Math.max(0, MAX_GALLERY_IMAGES - gallery.length);
+    if (remaining === 0) {
+      toast.error(`You can only upload up to ${MAX_GALLERY_IMAGES} gallery images`);
+      return;
+    }
     try {
       setConverting(true);
+      const selected = Array.from(files).slice(0, remaining);
       const converted = await Promise.all(
-        Array.from(files).map((f) => fileToWebp(f)),
+        selected.map((f) => fileToWebp(f)),
       );
       setGallery((prev) => [...prev, ...converted]);
     } catch (e) {
