@@ -284,6 +284,18 @@ function TopBar() {
           <span className="font-urdu text-lg text-muted-foreground">کوہاٹ</span>
         </Link>
         <nav className="flex items-center gap-2">
+          <Link
+            to="/about"
+            className="hidden rounded-sm px-3 py-2 text-sm text-foreground transition hover:text-primary sm:inline-flex"
+          >
+            About
+          </Link>
+          <Link
+            to="/contact"
+            className="rounded-sm px-3 py-2 text-sm text-foreground transition hover:text-primary"
+          >
+            Contact
+          </Link>
           <a
             href={socials.facebook}
             target="_blank"
@@ -715,11 +727,15 @@ function Footer() {
 
   return (
     <footer className="border-t border-border bg-[oklch(0.22_0.03_45)] text-primary-foreground">
-      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-2 px-6 py-6 text-xs text-primary-foreground/70 sm:flex-row sm:items-center">
+      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-3 px-6 py-6 text-xs text-primary-foreground/70 sm:flex-row sm:items-center">
         <p>© {new Date().getFullYear()} Kohat Shops. Built for the city.</p>
-        <p className="font-urdu text-sm" dir="rtl">
-          کوہاٹ سے، کوہاٹ کے لیے
-        </p>
+        <div className="flex items-center gap-4">
+          <Link to="/about" className="hover:text-accent">About</Link>
+          <Link to="/contact" className="hover:text-accent">Contact</Link>
+          <p className="font-urdu text-sm" dir="rtl">
+            کوہاٹ سے، کوہاٹ کے لیے
+          </p>
+        </div>
       </div>
     </footer>
   );

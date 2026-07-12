@@ -410,9 +410,21 @@ function TopBar() {
         <nav className="flex items-center gap-2">
           <Link
             to="/shops"
-            className="rounded-sm border border-border px-3 py-2 text-sm text-foreground transition hover:border-primary/40 hover:text-primary"
+            className="hidden rounded-sm border border-border px-3 py-2 text-sm text-foreground transition hover:border-primary/40 hover:text-primary sm:inline-flex"
           >
             All shops
+          </Link>
+          <Link
+            to="/about"
+            className="hidden rounded-sm px-3 py-2 text-sm text-foreground transition hover:text-primary sm:inline-flex"
+          >
+            About
+          </Link>
+          <Link
+            to="/contact"
+            className="rounded-sm px-3 py-2 text-sm text-foreground transition hover:text-primary"
+          >
+            Contact
           </Link>
           <a
             href={socials.facebook}
@@ -442,7 +454,9 @@ function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-muted-foreground">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <p>© {new Date().getFullYear()} Kohat Shops — a community directory.</p>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-4">
+            <Link to="/about" className="hover:text-primary">About</Link>
+            <Link to="/contact" className="hover:text-primary">Contact</Link>
             <a href={socials.facebook} target="_blank" rel="noreferrer" className="hover:text-primary">
               Facebook
             </a>
