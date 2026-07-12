@@ -21,8 +21,6 @@ import {
   Compass,
   MousePointerClick,
   PhoneCall,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import {
   heroImages,
@@ -32,6 +30,7 @@ import {
   about,
   socials,
 } from "@/data/home";
+import { FeaturedShops } from "@/components/FeaturedShops";
 
 export const Route = createFileRoute("/")({
   component: Home,
