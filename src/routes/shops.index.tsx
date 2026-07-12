@@ -653,67 +653,6 @@ function ShopRow({ shop: s }: { shop: Shop }) {
   );
 }
 
-function Pagination({
-  page,
-  totalPages,
-  start,
-  count,
-  total,
-  onChange,
-}: {
-  page: number;
-  totalPages: number;
-  start: number;
-  count: number;
-  total: number;
-  onChange: (p: number) => void;
-}) {
-  return (
-    <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row">
-      <p className="text-xs text-muted-foreground">
-        Showing{" "}
-        <span className="font-medium text-foreground">
-          {total === 0 ? 0 : start + 1}–{start + count}
-        </span>{" "}
-        of <span className="font-medium text-foreground">{total}</span>
-      </p>
-      {totalPages > 1 && (
-        <nav className="flex items-center gap-1" aria-label="Pagination">
-          <button
-            onClick={() => onChange(Math.max(1, page - 1))}
-            disabled={page === 1}
-            className="inline-flex items-center gap-1 rounded-sm border border-border bg-card px-2.5 py-1.5 text-sm text-foreground transition hover:border-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
-            aria-label="Previous page"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <button
-              key={p}
-              onClick={() => onChange(p)}
-              aria-current={p === page ? "page" : undefined}
-              className={`min-w-9 rounded-sm px-3 py-1.5 text-sm font-medium transition ${
-                p === page
-                  ? "bg-primary text-primary-foreground"
-                  : "border border-border bg-card text-foreground hover:border-primary/40"
-              }`}
-            >
-              {p}
-            </button>
-          ))}
-          <button
-            onClick={() => onChange(Math.min(totalPages, page + 1))}
-            disabled={page === totalPages}
-            className="inline-flex items-center gap-1 rounded-sm border border-border bg-card px-2.5 py-1.5 text-sm text-foreground transition hover:border-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
-            aria-label="Next page"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </nav>
-      )}
-    </div>
-  );
-}
 
 const ShopsMap = lazy(() => import("@/components/ShopsMap"));
 
