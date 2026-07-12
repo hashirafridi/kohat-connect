@@ -152,7 +152,7 @@ export function FeaturedShops({ className }: { className?: string }) {
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
             Handpicked
           </p>
-          <h2 className="mt-2 font-display text-xl font-semibold sm:text-2xl sm:text-3xl">
+          <h2 className="mt-2 font-display text-xl font-semibold sm:text-3xl">
             Featured shops in Kohat
           </h2>
           <p className="mt-2 max-w-xl text-sm text-muted-foreground">
