@@ -275,7 +275,9 @@ function CategoryChips() {
 }
 
 function Featured() {
-  const items = featuredShops.map((s) => ({
+  const { shops, usingFallback } = useShops();
+  const dbFeatured = shops.filter((s) => s.featured);
+  const fallbackItems = featuredShops.map((s) => ({
     slug: s.slug,
     name: s.name,
     categoryLabel: s.category,
@@ -285,6 +287,7 @@ function Featured() {
     phone: s.phone,
     featured: true,
   }));
+  const items = usingFallback || dbFeatured.length === 0 ? fallbackItems : dbFeatured;
 
   return (
     <FeaturedShops
