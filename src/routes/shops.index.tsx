@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import {
@@ -12,6 +12,11 @@ import {
   ArrowRight,
   SlidersHorizontal,
   X,
+  LayoutGrid,
+  List as ListIcon,
+  ChevronLeft,
+  ChevronRight,
+  Navigation,
 } from "lucide-react";
 import { shops, areas, type Shop } from "@/data/shops";
 import { categories } from "@/data/home";
@@ -49,6 +54,9 @@ function ShopsPage() {
   const navigate = Route.useNavigate();
   const [qInput, setQInput] = useState(q);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [view, setView] = useState<"grid" | "list">("grid");
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 6;
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -71,6 +79,16 @@ function ShopsPage() {
       );
     }
     return list;
+  }, [q, category, area, sort]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+  // Reset to page 1 whenever filters/sort change
+  useEffect(() => {
+    setPage(1);
   }, [q, category, area, sort]);
 
   const activeCount =
@@ -131,36 +149,90 @@ function ShopsPage() {
                   }
                 />
               </div>
-              <label className="hidden items-center gap-2 text-sm text-muted-foreground sm:flex">
-                Sort
-                <select
-                  value={sort}
-                  onChange={(e) =>
-                    navigate({
-                      search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, sort: e.target.value }),
-                    })
-                  }
-                  className="rounded-sm border border-border bg-card px-2 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
-                >
-                  <option value="featured">Featured first</option>
-                  <option value="name">Name A–Z</option>
-                  <option value="area">Area</option>
-                </select>
-              </label>
+              <div className="flex items-center gap-3">
+                <div className="hidden items-center gap-1 rounded-sm border border-border bg-card p-1 sm:flex">
+                  <button
+                    type="button"
+                    onClick={() => setView("grid")}
+                    aria-label="Grid view"
+                    aria-pressed={view === "grid"}
+                    className={`inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1.5 text-xs font-medium transition ${
+                      view === "grid"
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <LayoutGrid className="h-3.5 w-3.5" />
+                    Grid
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setView("list")}
+                    aria-label="List view"
+                    aria-pressed={view === "list"}
+                    className={`inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1.5 text-xs font-medium transition ${
+                      view === "list"
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <ListIcon className="h-3.5 w-3.5" />
+                    List
+                  </button>
+                </div>
+                <label className="hidden items-center gap-2 text-sm text-muted-foreground sm:flex">
+                  Sort
+                  <select
+                    value={sort}
+                    onChange={(e) =>
+                      navigate({
+                        search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, sort: e.target.value }),
+                      })
+                    }
+                    className="rounded-sm border border-border bg-card px-2 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  >
+                    <option value="featured">Featured first</option>
+                    <option value="name">Name A–Z</option>
+                    <option value="area">Area</option>
+                  </select>
+                </label>
+              </div>
             </div>
 
             {filtered.length === 0 ? (
               <EmptyState />
             ) : (
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {filtered.map((s) => (
-                  <ShopCard key={s.slug} shop={s} />
-                ))}
-              </div>
+              <>
+                {view === "grid" ? (
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                    {pageItems.map((s) => (
+                      <ShopCard key={s.slug} shop={s} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-4">
+                    {pageItems.map((s) => (
+                      <ShopRow key={s.slug} shop={s} />
+                    ))}
+                  </div>
+                )}
+
+                <Pagination
+                  page={currentPage}
+                  totalPages={totalPages}
+                  start={start}
+                  count={pageItems.length}
+                  total={filtered.length}
+                  onChange={setPage}
+                />
+              </>
             )}
           </div>
         </div>
       </section>
+
+      <MapSection shops={filtered} />
+
 
       {/* Mobile filter drawer */}
       {filtersOpen && (
@@ -551,7 +623,262 @@ function EmptyState() {
   );
 }
 
+function ShopRow({ shop: s }: { shop: Shop }) {
+  return (
+    <article className="group flex flex-col overflow-hidden rounded-sm border border-border bg-card transition hover:border-primary/40 hover:shadow-[0_18px_40px_-20px_oklch(0.22_0.03_45_/_0.35)] sm:flex-row">
+      <a
+        href={`/shops/${s.slug}`}
+        className="relative block overflow-hidden sm:w-64 sm:flex-shrink-0"
+      >
+        <img
+          src={s.image}
+          alt={s.name}
+          loading="lazy"
+          className="aspect-[4/3] h-full w-full object-cover transition duration-700 group-hover:scale-105 sm:aspect-auto"
+        />
+        <span className="absolute left-3 top-3 rounded-sm bg-background/95 px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-foreground">
+          {s.categoryLabel}
+        </span>
+        {s.featured && (
+          <span className="absolute right-3 top-3 rounded-sm bg-accent px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-accent-foreground">
+            Featured
+          </span>
+        )}
+      </a>
+      <div className="flex flex-1 flex-col gap-3 p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <a
+              href={`/shops/${s.slug}`}
+              className="font-display text-lg font-semibold text-foreground transition hover:text-primary"
+            >
+              {s.name}
+            </a>
+            <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+              <MapPin className="h-3.5 w-3.5" />
+              {s.area}
+            </p>
+          </div>
+        </div>
+        <p className="text-sm text-muted-foreground">{s.tagline}</p>
+        <div className="mt-auto flex flex-wrap items-center gap-2 pt-2">
+          <a
+            href={`https://wa.me/${s.whatsapp.replace(/\D/g, "")}`}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-sm bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+          >
+            <MessageCircle className="h-4 w-4" />
+            WhatsApp
+          </a>
+          <a
+            href={`tel:${s.phone}`}
+            className="inline-flex items-center gap-2 rounded-sm border border-border bg-background px-3 py-2 text-sm font-medium text-foreground transition hover:border-primary/40 hover:text-primary"
+          >
+            <Phone className="h-4 w-4" />
+            Call
+          </a>
+          <a
+            href={`/shops/${s.slug}`}
+            className="ml-auto inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+          >
+            View shop
+            <ArrowRight className="h-3.5 w-3.5" />
+          </a>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function Pagination({
+  page,
+  totalPages,
+  start,
+  count,
+  total,
+  onChange,
+}: {
+  page: number;
+  totalPages: number;
+  start: number;
+  count: number;
+  total: number;
+  onChange: (p: number) => void;
+}) {
+  return (
+    <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row">
+      <p className="text-xs text-muted-foreground">
+        Showing{" "}
+        <span className="font-medium text-foreground">
+          {total === 0 ? 0 : start + 1}–{start + count}
+        </span>{" "}
+        of <span className="font-medium text-foreground">{total}</span>
+      </p>
+      {totalPages > 1 && (
+        <nav className="flex items-center gap-1" aria-label="Pagination">
+          <button
+            onClick={() => onChange(Math.max(1, page - 1))}
+            disabled={page === 1}
+            className="inline-flex items-center gap-1 rounded-sm border border-border bg-card px-2.5 py-1.5 text-sm text-foreground transition hover:border-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              onClick={() => onChange(p)}
+              aria-current={p === page ? "page" : undefined}
+              className={`min-w-9 rounded-sm px-3 py-1.5 text-sm font-medium transition ${
+                p === page
+                  ? "bg-primary text-primary-foreground"
+                  : "border border-border bg-card text-foreground hover:border-primary/40"
+              }`}
+            >
+              {p}
+            </button>
+          ))}
+          <button
+            onClick={() => onChange(Math.min(totalPages, page + 1))}
+            disabled={page === totalPages}
+            className="inline-flex items-center gap-1 rounded-sm border border-border bg-card px-2.5 py-1.5 text-sm text-foreground transition hover:border-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
+            aria-label="Next page"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </nav>
+      )}
+    </div>
+  );
+}
+
+function MapSection({ shops: list }: { shops: Shop[] }) {
+  // Deterministic pseudo-coordinates per slug so pins stay put across renders.
+  // Real lat/lng comes later once shop rows carry coordinates.
+  const pins = useMemo(() => {
+    return list.map((s) => {
+      let h = 0;
+      for (let i = 0; i < s.slug.length; i++) {
+        h = (h * 31 + s.slug.charCodeAt(i)) >>> 0;
+      }
+      const left = 8 + (h % 84); // 8–92%
+      const top = 10 + ((h >> 8) % 78); // 10–88%
+      return { shop: s, left, top };
+    });
+  }, [list]);
+
+  return (
+    <section className="border-t border-border bg-secondary/40 px-6 py-16">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Map view
+            </p>
+            <h2 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
+              Every shop on the map
+            </h2>
+            <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+              Pins reflect your current filters. Real locations wire in once
+              each shop is geo-tagged.
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-2 rounded-sm border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
+            <Navigation className="h-4 w-4 text-primary" />
+            Showing{" "}
+            <span className="font-medium text-foreground">{list.length}</span>{" "}
+            location{list.length === 1 ? "" : "s"}
+          </div>
+        </div>
+
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-border bg-[oklch(0.94_0.02_120)]">
+          {/* Faux map surface */}
+          <div
+            aria-hidden
+            className="absolute inset-0 opacity-70"
+            style={{
+              backgroundImage:
+                "linear-gradient(oklch(0.86_0.03_120) 1px, transparent 1px), linear-gradient(90deg, oklch(0.86_0.03_120) 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
+            }}
+          />
+          {/* Faux roads */}
+          <svg
+            aria-hidden
+            className="absolute inset-0 h-full w-full"
+            viewBox="0 0 100 60"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0 40 C 25 30, 45 55, 70 35 S 100 20, 110 25"
+              stroke="oklch(0.75 0.05 80)"
+              strokeWidth="1.2"
+              fill="none"
+            />
+            <path
+              d="M15 0 L 25 60"
+              stroke="oklch(0.78 0.04 80)"
+              strokeWidth="0.8"
+              fill="none"
+            />
+            <path
+              d="M60 0 L 55 60"
+              stroke="oklch(0.78 0.04 80)"
+              strokeWidth="0.8"
+              fill="none"
+            />
+            <path
+              d="M0 15 L 100 12"
+              stroke="oklch(0.78 0.04 80)"
+              strokeWidth="0.8"
+              fill="none"
+            />
+          </svg>
+
+          {/* Kohat label */}
+          <div className="pointer-events-none absolute left-4 top-4 rounded-sm bg-background/90 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+            Kohat, KPK
+          </div>
+
+          {/* Pins */}
+          {pins.map(({ shop: s, left, top }) => (
+            <a
+              key={s.slug}
+              href={`/shops/${s.slug}`}
+              className="group absolute -translate-x-1/2 -translate-y-full"
+              style={{ left: `${left}%`, top: `${top}%` }}
+              aria-label={s.name}
+            >
+              <div className="flex flex-col items-center">
+                <div className="relative">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg ring-2 ring-background transition group-hover:scale-110">
+                    <MapPin className="h-4 w-4" />
+                  </div>
+                  <div className="absolute left-1/2 top-full h-2 w-2 -translate-x-1/2 -translate-y-1 rotate-45 bg-primary" />
+                </div>
+                <div className="pointer-events-none mt-2 max-w-[140px] truncate rounded-sm bg-background/95 px-2 py-1 text-[11px] font-medium text-foreground opacity-0 shadow transition group-hover:opacity-100">
+                  {s.name}
+                </div>
+              </div>
+            </a>
+          ))}
+
+          {list.length === 0 && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <p className="rounded-sm bg-background/95 px-4 py-2 text-sm text-muted-foreground">
+                No shops match — clear a filter to see pins.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Footer() {
+
   return (
     <footer className="border-t border-border bg-[oklch(0.22_0.03_45)] text-primary-foreground">
       <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-2 px-6 py-6 text-xs text-primary-foreground/70 sm:flex-row sm:items-center">
