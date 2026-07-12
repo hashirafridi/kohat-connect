@@ -277,9 +277,6 @@ function ShopsPage() {
 /* ------------ Sub-components ------------ */
 
 function TopBar() {
-  const scrollToMap = () =>
-    document.getElementById("shops-map")?.scrollIntoView({ behavior: "smooth", block: "start" });
-
   return (
     <header className="border-b border-border bg-background">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -290,14 +287,6 @@ function TopBar() {
           <span className="font-urdu text-lg text-muted-foreground">کوہاٹ</span>
         </Link>
         <nav className="flex items-center gap-2">
-          <button
-            onClick={scrollToMap}
-            aria-label="Jump to map"
-            className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition hover:border-primary/40 hover:text-primary"
-          >
-            <MapPin className="h-4 w-4" />
-            Map
-          </button>
           <a
             href={socials.facebook}
             target="_blank"
@@ -392,8 +381,27 @@ function Filters({
   onChange: (patch: Partial<{ category: string; area: string; sort: string }>) => void;
   onClear: () => void;
 }) {
+  const scrollToMap = () =>
+    document.getElementById("shops-map")?.scrollIntoView({ behavior: "smooth", block: "start" });
+
   return (
     <div className="space-y-8">
+      <div className="rounded-sm border border-border bg-card p-4">
+        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Map
+        </p>
+        <p className="mt-2 text-sm text-foreground">
+          See every shop on the map with its location.
+        </p>
+        <button
+          onClick={scrollToMap}
+          className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+        >
+          <MapPin className="h-4 w-4" />
+          View map
+        </button>
+      </div>
+
       <div>
         <div className="mb-3 flex items-center justify-between">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
@@ -825,7 +833,7 @@ function MapSection({ shops: list }: { shops: Shop[] }) {
 
 function FeaturedSection() {
   const featured = useMemo(() => shops.filter((s) => s.featured), []);
-  const PAGE_SIZE = 6;
+  const PAGE_SIZE = 8;
   const [page, setPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil(featured.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -849,7 +857,7 @@ function FeaturedSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           {pageItems.map((s) => (
             <ShopCard key={s.slug} shop={s} />
           ))}
