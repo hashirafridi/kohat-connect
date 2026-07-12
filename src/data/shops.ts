@@ -178,6 +178,8 @@ export const shops: Shop[] = [
     whatsapp: "+923001234575",
     phone: "+923001234575",
     tagline: "Quetta chai and bun kebab.",
+    facebook: "https://facebook.com/QuettaCafeKohat",
+    instagram: "https://instagram.com/quetta_cafe_kohat",
   },
   {
     slug: "friends-bike-workshop",
