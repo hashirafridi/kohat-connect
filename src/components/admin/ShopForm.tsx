@@ -114,7 +114,7 @@ type Props = {
   mode: "create" | "edit";
   initial?: Partial<ShopFormValues>;
   submitLabel?: string;
-  onSubmit?: (values: ShopFormValues) => void;
+  onSubmit?: (values: ShopFormValues) => void | Promise<void>;
 };
 
 export function ShopForm({ mode, initial, submitLabel, onSubmit }: Props) {
