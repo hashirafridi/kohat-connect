@@ -386,6 +386,22 @@ function Filters({
 
   return (
     <div className="space-y-8">
+      <div className="rounded-sm border border-border bg-card p-4">
+        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Map
+        </p>
+        <p className="mt-2 text-sm text-foreground">
+          See every shop on the map with its location.
+        </p>
+        <button
+          onClick={scrollToMap}
+          className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+        >
+          <MapPin className="h-4 w-4" />
+          View map
+        </button>
+      </div>
+
       <div>
         <div className="mb-3 flex items-center justify-between">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
