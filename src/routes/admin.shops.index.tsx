@@ -17,6 +17,7 @@ export const Route = createFileRoute("/admin/shops/")({
 
 function AdminShopsList() {
   const [q, setQ] = useState("");
+  const { shops, usingFallback, isLoading } = useShops();
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -28,7 +29,7 @@ function AdminShopsList() {
         s.categoryLabel.toLowerCase().includes(term) ||
         s.area.toLowerCase().includes(term),
     );
-  }, [q]);
+  }, [q, shops]);
 
   return (
     <div className="min-h-screen bg-muted/30">
