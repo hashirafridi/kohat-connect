@@ -30,6 +30,8 @@ export const Route = createFileRoute("/admin/shops/new")({
 type WebpImage = { name: string; dataUrl: string; blob: Blob };
 type HourRow = { day: string; open: string; close: string };
 
+const MAX_GALLERY_IMAGES = 6;
+
 const DEFAULT_HOURS: HourRow[] = [
   { day: "Monday", open: "10:00", close: "22:00" },
   { day: "Tuesday", open: "10:00", close: "22:00" },
@@ -117,10 +119,16 @@ function CreateShopPage() {
 
   async function handleGallery(files: FileList | null) {
     if (!files || files.length === 0) return;
+    const remaining = Math.max(0, MAX_GALLERY_IMAGES - gallery.length);
+    if (remaining === 0) {
+      toast.error(`You can only upload up to ${MAX_GALLERY_IMAGES} gallery images`);
+      return;
+    }
     try {
       setConverting(true);
+      const selected = Array.from(files).slice(0, remaining);
       const converted = await Promise.all(
-        Array.from(files).map((f) => fileToWebp(f)),
+        selected.map((f) => fileToWebp(f)),
       );
       setGallery((prev) => [...prev, ...converted]);
     } catch (e) {
@@ -497,7 +505,12 @@ function CreateShopPage() {
             </div>
 
             <div>
-              <Label className="mb-2 block">Gallery images</Label>
+              <div className="mb-2 flex items-center justify-between">
+                <Label>Gallery images</Label>
+                <span className="text-xs text-muted-foreground">
+                  {gallery.length} / {MAX_GALLERY_IMAGES}
+                </span>
+              </div>
               <div className="flex flex-wrap gap-3">
                 {gallery.map((g, i) => (
                   <div key={i} className="relative">
@@ -518,18 +531,25 @@ function CreateShopPage() {
                     </button>
                   </div>
                 ))}
-                <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed text-xs text-muted-foreground hover:bg-muted/50">
-                  <Plus className="mb-0.5 h-4 w-4" />
-                  Add
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    onChange={(e) => handleGallery(e.target.files)}
-                  />
-                </label>
+                {gallery.length < MAX_GALLERY_IMAGES && (
+                  <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed text-xs text-muted-foreground hover:bg-muted/50">
+                    <Plus className="mb-0.5 h-4 w-4" />
+                    Add
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      onChange={(e) => handleGallery(e.target.files)}
+                    />
+                  </label>
+                )}
               </div>
+              {gallery.length === MAX_GALLERY_IMAGES && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Maximum of {MAX_GALLERY_IMAGES} gallery images reached.
+                </p>
+              )}
             </div>
 
             {converting ? (
