@@ -284,6 +284,18 @@ function TopBar() {
           <span className="font-urdu text-lg text-muted-foreground">کوہاٹ</span>
         </Link>
         <nav className="flex items-center gap-2">
+          <Link
+            to="/about"
+            className="hidden rounded-sm px-3 py-2 text-sm text-foreground transition hover:text-primary sm:inline-flex"
+          >
+            About
+          </Link>
+          <Link
+            to="/contact"
+            className="rounded-sm px-3 py-2 text-sm text-foreground transition hover:text-primary"
+          >
+            Contact
+          </Link>
           <a
             href={socials.facebook}
             target="_blank"
