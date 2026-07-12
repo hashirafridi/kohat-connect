@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import {
@@ -232,6 +232,8 @@ function ShopsPage() {
       </section>
 
       <MapSection shops={filtered} />
+      <FeaturedSection />
+
 
 
       {/* Mobile filter drawer */}
@@ -753,20 +755,13 @@ function Pagination({
   );
 }
 
+const ShopsMap = lazy(() => import("@/components/ShopsMap"));
+
 function MapSection({ shops: list }: { shops: Shop[] }) {
-  // Deterministic pseudo-coordinates per slug so pins stay put across renders.
-  // Real lat/lng comes later once shop rows carry coordinates.
-  const pins = useMemo(() => {
-    return list.map((s) => {
-      let h = 0;
-      for (let i = 0; i < s.slug.length; i++) {
-        h = (h * 31 + s.slug.charCodeAt(i)) >>> 0;
-      }
-      const left = 8 + (h % 84); // 8–92%
-      const top = 10 + ((h >> 8) % 78); // 10–88%
-      return { shop: s, left, top };
-    });
-  }, [list]);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <section className="border-t border-border bg-secondary/40 px-6 py-16">
@@ -780,8 +775,7 @@ function MapSection({ shops: list }: { shops: Shop[] }) {
               Every shop on the map
             </h2>
             <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-              Pins reflect your current filters. Real locations wire in once
-              each shop is geo-tagged.
+              Pins reflect your current filters. Click a pin for shop details.
             </p>
           </div>
           <div className="inline-flex items-center gap-2 rounded-sm border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
@@ -792,90 +786,77 @@ function MapSection({ shops: list }: { shops: Shop[] }) {
           </div>
         </div>
 
-        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-border bg-[oklch(0.94_0.02_120)]">
-          {/* Faux map surface */}
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-70"
-            style={{
-              backgroundImage:
-                "linear-gradient(oklch(0.86_0.03_120) 1px, transparent 1px), linear-gradient(90deg, oklch(0.86_0.03_120) 1px, transparent 1px)",
-              backgroundSize: "48px 48px",
-            }}
-          />
-          {/* Faux roads */}
-          <svg
-            aria-hidden
-            className="absolute inset-0 h-full w-full"
-            viewBox="0 0 100 60"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0 40 C 25 30, 45 55, 70 35 S 100 20, 110 25"
-              stroke="oklch(0.75 0.05 80)"
-              strokeWidth="1.2"
-              fill="none"
-            />
-            <path
-              d="M15 0 L 25 60"
-              stroke="oklch(0.78 0.04 80)"
-              strokeWidth="0.8"
-              fill="none"
-            />
-            <path
-              d="M60 0 L 55 60"
-              stroke="oklch(0.78 0.04 80)"
-              strokeWidth="0.8"
-              fill="none"
-            />
-            <path
-              d="M0 15 L 100 12"
-              stroke="oklch(0.78 0.04 80)"
-              strokeWidth="0.8"
-              fill="none"
-            />
-          </svg>
-
-          {/* Kohat label */}
-          <div className="pointer-events-none absolute left-4 top-4 rounded-sm bg-background/90 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-            Kohat, KPK
-          </div>
-
-          {/* Pins */}
-          {pins.map(({ shop: s, left, top }) => (
-            <a
-              key={s.slug}
-              href={`/shops/${s.slug}`}
-              className="group absolute -translate-x-1/2 -translate-y-full"
-              style={{ left: `${left}%`, top: `${top}%` }}
-              aria-label={s.name}
-            >
-              <div className="flex flex-col items-center">
-                <div className="relative">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg ring-2 ring-background transition group-hover:scale-110">
-                    <MapPin className="h-4 w-4" />
-                  </div>
-                  <div className="absolute left-1/2 top-full h-2 w-2 -translate-x-1/2 -translate-y-1 rotate-45 bg-primary" />
-                </div>
-                <div className="pointer-events-none mt-2 max-w-[140px] truncate rounded-sm bg-background/95 px-2 py-1 text-[11px] font-medium text-foreground opacity-0 shadow transition group-hover:opacity-100">
-                  {s.name}
-                </div>
+        {mounted ? (
+          <Suspense
+            fallback={
+              <div className="flex aspect-[16/9] w-full items-center justify-center rounded-sm border border-border bg-card text-sm text-muted-foreground">
+                Loading map…
               </div>
-            </a>
-          ))}
+            }
+          >
+            <ShopsMap shops={list} />
+          </Suspense>
+        ) : (
+          <div className="flex aspect-[16/9] w-full items-center justify-center rounded-sm border border-border bg-card text-sm text-muted-foreground">
+            Loading map…
+          </div>
+        )}
 
-          {list.length === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <p className="rounded-sm bg-background/95 px-4 py-2 text-sm text-muted-foreground">
-                No shops match — clear a filter to see pins.
-              </p>
-            </div>
-          )}
-        </div>
+        {list.length === 0 && (
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            No shops match — clear a filter to see pins.
+          </p>
+        )}
       </div>
     </section>
   );
 }
+
+function FeaturedSection() {
+  const featured = useMemo(() => shops.filter((s) => s.featured), []);
+  const PAGE_SIZE = 6;
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(featured.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = featured.slice(start, start + PAGE_SIZE);
+
+  return (
+    <section className="border-t border-border bg-background px-6 py-16">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Handpicked
+            </p>
+            <h2 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
+              Featured shops in Kohat
+            </h2>
+            <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+              Local favourites worth a visit — vetted by us, loved by the city.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {pageItems.map((s) => (
+            <ShopCard key={s.slug} shop={s} />
+          ))}
+        </div>
+
+        <Pagination
+          page={currentPage}
+          totalPages={totalPages}
+          start={start}
+          count={pageItems.length}
+          total={featured.length}
+          onChange={setPage}
+        />
+      </div>
+    </section>
+  );
+}
+
 
 function Footer() {
 
