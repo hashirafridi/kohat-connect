@@ -343,6 +343,143 @@ function Featured() {
   );
 }
 
+function RecentlyAdded() {
+  const recent = [...featuredShops].reverse().slice(0, 4);
+  return (
+    <section className="border-t border-border px-6 py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-8 flex items-end justify-between">
+          <div>
+            <p className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              <Sparkles className="h-3.5 w-3.5 text-accent" />
+              Fresh on the directory
+            </p>
+            <h2 className="mt-1 font-display text-3xl font-semibold sm:text-4xl">
+              Recently added shops
+            </h2>
+          </div>
+          <a
+            href="/shops?sort=newest"
+            className="hidden text-sm font-medium text-primary underline-offset-4 hover:underline sm:inline"
+          >
+            Browse newest →
+          </a>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+          {recent.map((s) => (
+            <a
+              key={s.slug}
+              href={`/shops/${s.slug}`}
+              className="group flex flex-col overflow-hidden rounded-sm border border-border bg-card transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_18px_40px_-20px_oklch(0.22_0.03_45_/_0.35)]"
+            >
+              <div className="relative overflow-hidden">
+                <img
+                  src={s.image}
+                  alt={s.name}
+                  width={600}
+                  height={450}
+                  loading="lazy"
+                  className="aspect-[4/3] w-full object-cover transition duration-700 group-hover:scale-105"
+                />
+                <span className="absolute left-2 top-2 rounded-sm bg-accent px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent-foreground">
+                  New
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col gap-1 p-4">
+                <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                  {s.category}
+                </p>
+                <p className="font-display text-base font-semibold leading-snug text-foreground group-hover:text-primary">
+                  {s.name}
+                </p>
+                <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                  <MapPin className="h-3 w-3" />
+                  {s.area}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HowItWorks() {
+  const steps = [
+    {
+      icon: Search,
+      title: "Search or browse",
+      urdu: "تلاش کریں",
+      body: "Find a shop by name, category or area — from biryani stalls on Bannu Road to bike mechanics in KDA.",
+    },
+    {
+      icon: MousePointerClick,
+      title: "Open the shop page",
+      urdu: "دکان کھولیں",
+      body: "See photos, address, timings, gallery and a map location — everything you need before you head out.",
+    },
+    {
+      icon: PhoneCall,
+      title: "Call or WhatsApp",
+      urdu: "رابطہ کریں",
+      body: "Contact the shop directly on WhatsApp or phone. No middleman, no signup — just tap and talk.",
+    },
+  ];
+  return (
+    <section className="border-t border-border bg-secondary/40 px-6 py-16 sm:py-20">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-10 max-w-2xl">
+          <p className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <Compass className="h-3.5 w-3.5 text-accent" />
+            How it works
+          </p>
+          <h2 className="mt-1 font-display text-3xl font-semibold sm:text-4xl">
+            Three steps to reach any shop in Kohat
+          </h2>
+          <p className="mt-3 text-base text-muted-foreground">
+            No apps to install, no accounts to create. Just browse, find and contact — the way the bazaar has always worked.
+          </p>
+        </div>
+        <ol className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+          {steps.map((step, i) => {
+            const Icon = step.icon;
+            return (
+              <li
+                key={step.title}
+                className="relative flex flex-col gap-4 rounded-sm border border-border bg-card p-6 transition hover:border-primary/40"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-sm bg-primary text-primary-foreground">
+                    <Icon className="h-5 w-5" strokeWidth={1.75} />
+                  </span>
+                  <span className="font-display text-4xl font-semibold text-muted-foreground/25">
+                    0{i + 1}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="font-display text-lg font-semibold text-foreground">
+                    {step.title}
+                  </h3>
+                  <p className="font-urdu text-sm text-muted-foreground" dir="rtl">
+                    {step.urdu}
+                  </p>
+                </div>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {step.body}
+                </p>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+
+
 function AboutStrip() {
   return (
     <section className="border-t border-border px-6 py-20">
