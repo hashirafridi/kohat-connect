@@ -16,7 +16,7 @@ import { shops, type Shop } from "@/data/shops";
 import { socials } from "@/data/home";
 
 export const Route = createFileRoute("/shops/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { shop: Shop; related: Shop[] } => {
     const shop = shops.find((s) => s.slug === params.slug);
     if (!shop) throw notFound();
     const related = shops
