@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MessageCircle, Phone, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { shops, type Shop } from "@/data/shops";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function ShopCard({ shop: s }: { shop: Shop }) {
   return (
@@ -18,48 +19,48 @@ export function ShopCard({ shop: s }: { shop: Shop }) {
           width={900}
           height={700}
           loading="lazy"
-          className="aspect-[4/3] w-full object-cover transition duration-700 group-hover:scale-105"
+          className="aspect-[16/11] w-full object-cover transition duration-700 group-hover:scale-105 sm:aspect-[4/3]"
         />
-        <span className="absolute left-3 top-3 rounded-sm bg-background/95 px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-foreground">
+        <span className="absolute left-2 top-2 rounded-sm bg-background/95 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-foreground sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-xs">
           {s.categoryLabel}
         </span>
         {s.featured && (
-          <span className="absolute right-3 top-3 rounded-sm bg-accent px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-accent-foreground">
+          <span className="absolute right-2 top-2 rounded-sm bg-accent px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent-foreground sm:right-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-xs">
             Featured
           </span>
         )}
       </Link>
-      <div className="flex flex-1 flex-col gap-3 p-5">
+      <div className="flex flex-1 flex-col gap-2 p-3 sm:gap-3 sm:p-5">
         <div>
           <Link
             to="/shops/$slug"
             params={{ slug: s.slug }}
-            className="font-display text-lg font-semibold text-foreground transition hover:text-primary"
+            className="font-display text-base font-semibold text-foreground transition hover:text-primary sm:text-lg"
           >
             {s.name}
           </Link>
-          <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin className="h-3.5 w-3.5" />
+          <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground sm:mt-1 sm:text-sm">
+            <MapPin className="h-3 w-3" />
             {s.area}
           </p>
         </div>
-        <p className="text-sm text-muted-foreground">{s.tagline}</p>
-        <div className="mt-auto flex items-center gap-2 border-t border-border pt-4">
+        <p className="line-clamp-2 text-xs text-muted-foreground sm:text-sm">{s.tagline}</p>
+        <div className="mt-auto flex items-center gap-2 border-t border-border pt-3 sm:pt-4">
           <a
             href={`https://wa.me/${s.whatsapp.replace(/\D/g, "")}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-sm bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-sm bg-primary px-2.5 py-1.5 text-xs font-medium text-primary-foreground transition hover:bg-primary/90 sm:px-3 sm:py-2 sm:text-sm"
           >
-            <MessageCircle className="h-4 w-4" />
+            <MessageCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             WhatsApp
           </a>
           <a
             href={`tel:${s.phone}`}
-            className="inline-flex items-center justify-center gap-2 rounded-sm border border-border bg-background px-3 py-2 text-sm font-medium text-foreground transition hover:border-primary/40 hover:text-primary"
+            className="inline-flex items-center justify-center gap-1.5 rounded-sm border border-border bg-background px-2.5 py-1.5 text-xs font-medium text-foreground transition hover:border-primary/40 hover:text-primary sm:px-3 sm:py-2 sm:text-sm"
             aria-label={`Call ${s.name}`}
           >
-            <Phone className="h-4 w-4" />
+            <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             Call
           </a>
         </div>
@@ -132,31 +133,34 @@ export function Pagination({
 
 export function FeaturedShops({ className }: { className?: string }) {
   const featured = useMemo(() => shops.filter((s) => s.featured), []);
-  const PAGE_SIZE = 8;
+  const isMobile = useIsMobile();
+  const PAGE_SIZE = isMobile ? 3 : 8;
   const [page, setPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil(featured.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const start = (currentPage - 1) * PAGE_SIZE;
   const pageItems = featured.slice(start, start + PAGE_SIZE);
 
+  useEffect(() => {
+    setPage(1);
+  }, [isMobile]);
+
   return (
-    <section className={cn("border-t border-border bg-background px-6 py-16", className)}>
+    <section className={cn("border-t border-border bg-background px-6 py-12 sm:py-16", className)}>
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              Handpicked
-            </p>
-            <h2 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
-              Featured shops in Kohat
-            </h2>
-            <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-              Local favourites worth a visit — vetted by us, loved by the city.
-            </p>
-          </div>
+        <div className="mb-6 sm:mb-8">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            Handpicked
+          </p>
+          <h2 className="mt-2 font-display text-xl font-semibold sm:text-3xl">
+            Featured shops in Kohat
+          </h2>
+          <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+            Local favourites worth a visit — vetted by us, loved by the city.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 2xl:grid-cols-4">
           {pageItems.map((s) => (
             <ShopCard key={s.slug} shop={s} />
           ))}
