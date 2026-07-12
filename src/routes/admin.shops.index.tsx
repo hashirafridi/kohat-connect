@@ -118,7 +118,9 @@ function AdminShopsList() {
         </div>
 
         <p className="text-xs text-muted-foreground">
-          Showing {filtered.length} of {shops.length} shops.
+          {isLoading
+            ? "Loading shops…"
+            : `Showing ${filtered.length} of ${shops.length} shops.${usingFallback ? " (Showing sample data — no shops in the database yet.)" : ""}`}
         </p>
       </div>
     </div>
