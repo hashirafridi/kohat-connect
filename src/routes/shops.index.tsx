@@ -12,6 +12,11 @@ import {
   ArrowRight,
   SlidersHorizontal,
   X,
+  LayoutGrid,
+  List as ListIcon,
+  ChevronLeft,
+  ChevronRight,
+  Navigation,
 } from "lucide-react";
 import { shops, areas, type Shop } from "@/data/shops";
 import { categories } from "@/data/home";
