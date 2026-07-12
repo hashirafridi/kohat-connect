@@ -16,7 +16,8 @@ import {
   List as ListIcon,
   Navigation,
 } from "lucide-react";
-import { shops, areas, type Shop } from "@/data/shops";
+import { areas, type Shop } from "@/data/shops";
+import { useShops } from "@/hooks/use-shops";
 import { categories } from "@/data/home";
 import { socials } from "@/data/home";
 import { ShopCard, Pagination, FeaturedShops } from "@/components/FeaturedShops";
