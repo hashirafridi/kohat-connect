@@ -164,7 +164,8 @@ export function FeaturedShops({
   linkHref?: string;
   linkLabel?: string;
 }) {
-  const defaultItems = useMemo(() => shops.filter((s) => s.featured), []);
+  const { shops } = useShops();
+  const defaultItems = useMemo(() => shops.filter((s) => s.featured), [shops]);
   const source = items ?? defaultItems;
   const isMobile = useIsMobile();
   const PAGE_SIZE = isMobile ? 3 : 8;
