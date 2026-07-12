@@ -77,6 +77,18 @@ function TopBar() {
           </span>
         </Link>
         <nav className="flex items-center gap-2">
+          <Link
+            to="/about"
+            className="hidden rounded-sm px-3 py-2 text-sm text-primary-foreground transition hover:text-accent sm:inline-flex"
+          >
+            About
+          </Link>
+          <Link
+            to="/contact"
+            className="rounded-sm px-3 py-2 text-sm text-primary-foreground transition hover:text-accent"
+          >
+            Contact
+          </Link>
           <a
             href={socials.facebook}
             target="_blank"
