@@ -304,7 +304,22 @@ function Featured() {
 }
 
 function RecentlyAdded() {
-  const recent = [...featuredShops].reverse().slice(0, 4);
+  const { shops, usingFallback } = useShops();
+  const recent = usingFallback
+    ? [...featuredShops].reverse().slice(0, 4).map((s) => ({
+        slug: s.slug,
+        name: s.name,
+        category: s.category,
+        area: s.area,
+        image: s.image,
+      }))
+    : shops.slice(0, 4).map((s) => ({
+        slug: s.slug,
+        name: s.name,
+        category: s.categoryLabel,
+        area: s.area,
+        image: s.image,
+      }));
   return (
     <section className="border-t border-border px-6 py-16 sm:py-20">
       <div className="mx-auto max-w-7xl">
