@@ -67,7 +67,7 @@ export function ShopCard({ shop: s }: { shop: Shop }) {
   );
 }
 
-function Pagination({
+export function Pagination({
   page,
   totalPages,
   start,
