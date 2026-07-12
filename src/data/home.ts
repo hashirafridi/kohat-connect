@@ -117,5 +117,7 @@ export const socials = {
   facebook: "https://facebook.com/",
   instagram: "https://instagram.com/",
   whatsapp: "https://wa.me/923000000000",
+  whatsappNumber: "+92 300 0000000",
+  phone: "+92 300 0000000",
   contactEmail: "hello@kohatshops.pk",
 };
