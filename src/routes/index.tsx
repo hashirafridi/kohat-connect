@@ -21,6 +21,8 @@ import {
   Compass,
   MousePointerClick,
   PhoneCall,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import {
   heroImages,
@@ -261,6 +263,12 @@ function CategoryChips() {
 }
 
 function Featured() {
+  const PAGE_SIZE = 6;
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(featuredShops.length / PAGE_SIZE));
+  const start = (page - 1) * PAGE_SIZE;
+  const pageItems = featuredShops.slice(start, start + PAGE_SIZE);
+
   return (
     <section className="border-t border-border bg-secondary/40 px-6 py-16 sm:py-20">
       <div className="mx-auto max-w-7xl">
@@ -282,12 +290,10 @@ function Featured() {
         </div>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredShops.map((s, i) => (
+          {pageItems.map((s) => (
             <article
               key={s.slug}
-              className={`group flex flex-col overflow-hidden rounded-sm border border-border bg-card transition hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_oklch(0.22_0.03_45_/_0.35)] ${
-                i === 0 ? "lg:col-span-1" : ""
-              }`}
+              className="group flex flex-col overflow-hidden rounded-sm border border-border bg-card transition hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_oklch(0.22_0.03_45_/_0.35)]"
             >
               <a href={`/shops/${s.slug}`} className="relative block overflow-hidden">
                 <img
@@ -338,6 +344,59 @@ function Featured() {
             </article>
           ))}
         </div>
+
+        {totalPages > 1 && (
+          <nav
+            aria-label="Featured shops pagination"
+            className="mt-10 flex items-center justify-between gap-4 border-t border-border pt-6"
+          >
+            <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+              Showing <span className="text-foreground">{start + 1}</span>–
+              <span className="text-foreground">
+                {Math.min(start + PAGE_SIZE, featuredShops.length)}
+              </span>{" "}
+              of <span className="text-foreground">{featuredShops.length}</span>
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                aria-label="Previous page"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-border bg-card text-foreground transition hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:text-foreground"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
+                const active = n === page;
+                return (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => setPage(n)}
+                    aria-current={active ? "page" : undefined}
+                    className={`inline-flex h-9 min-w-9 items-center justify-center rounded-sm border px-3 text-sm font-medium transition ${
+                      active
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-card text-foreground hover:border-primary/40 hover:text-primary"
+                    }`}
+                  >
+                    {n}
+                  </button>
+                );
+              })}
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                aria-label="Next page"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-border bg-card text-foreground transition hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:text-foreground"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </nav>
+        )}
       </div>
     </section>
   );
