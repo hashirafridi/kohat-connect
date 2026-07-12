@@ -166,7 +166,7 @@ export function FeaturedShops({
 }) {
   const { shops } = useShops();
   const defaultItems = useMemo(() => shops.filter((s) => s.featured), [shops]);
-  const source = items ?? defaultItems;
+  const source: ShopCardItem[] = items ?? defaultItems;
   const isMobile = useIsMobile();
   const PAGE_SIZE = isMobile ? 3 : 8;
   const [page, setPage] = useState(1);
