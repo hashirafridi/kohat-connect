@@ -4,6 +4,8 @@ import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import {
   Search,
+  Phone,
+  MessageCircle,
   Facebook,
   Mail,
   MapPin,
