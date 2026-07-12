@@ -20,6 +20,9 @@ export type Shop = {
   phone: string;
   tagline: string;
   featured?: boolean;
+  // Coordinates for map view (later fetched from DB).
+  lat: number;
+  lng: number;
   // Optional details for the single-shop page. Fall back to sensible defaults.
   email?: string;
   address?: string;
