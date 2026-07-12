@@ -81,6 +81,16 @@ function ShopsPage() {
     return list;
   }, [q, category, area, sort]);
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+  // Reset to page 1 whenever filters/sort change
+  useMemo(() => {
+    setPage(1);
+  }, [q, category, area, sort]);
+
   const activeCount =
     (q ? 1 : 0) + (category ? 1 : 0) + (area ? 1 : 0) + (sort !== "featured" ? 1 : 0);
 
