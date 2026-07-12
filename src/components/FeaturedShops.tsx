@@ -133,31 +133,34 @@ export function Pagination({
 
 export function FeaturedShops({ className }: { className?: string }) {
   const featured = useMemo(() => shops.filter((s) => s.featured), []);
-  const PAGE_SIZE = 8;
+  const isMobile = useIsMobile();
+  const PAGE_SIZE = isMobile ? 3 : 8;
   const [page, setPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil(featured.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const start = (currentPage - 1) * PAGE_SIZE;
   const pageItems = featured.slice(start, start + PAGE_SIZE);
 
+  useEffect(() => {
+    setPage(1);
+  }, [isMobile]);
+
   return (
-    <section className={cn("border-t border-border bg-background px-6 py-16", className)}>
+    <section className={cn("border-t border-border bg-background px-6 py-12 sm:py-16", className)}>
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              Handpicked
-            </p>
-            <h2 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
-              Featured shops in Kohat
-            </h2>
-            <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-              Local favourites worth a visit — vetted by us, loved by the city.
-            </p>
-          </div>
+        <div className="mb-6 sm:mb-8">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            Handpicked
+          </p>
+          <h2 className="mt-2 font-display text-xl font-semibold sm:text-2xl sm:text-3xl">
+            Featured shops in Kohat
+          </h2>
+          <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+            Local favourites worth a visit — vetted by us, loved by the city.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 2xl:grid-cols-4">
           {pageItems.map((s) => (
             <ShopCard key={s.slug} shop={s} />
           ))}
