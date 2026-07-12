@@ -711,50 +711,6 @@ function MapSection({ shops: list }: { shops: Shop[] }) {
   );
 }
 
-function FeaturedSection() {
-  const featured = useMemo(() => shops.filter((s) => s.featured), []);
-  const PAGE_SIZE = 8;
-  const [page, setPage] = useState(1);
-  const totalPages = Math.max(1, Math.ceil(featured.length / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const pageItems = featured.slice(start, start + PAGE_SIZE);
-
-  return (
-    <section className="border-t border-border bg-background px-6 py-16">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              Handpicked
-            </p>
-            <h2 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
-              Featured shops in Kohat
-            </h2>
-            <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-              Local favourites worth a visit — vetted by us, loved by the city.
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-          {pageItems.map((s) => (
-            <ShopCard key={s.slug} shop={s} />
-          ))}
-        </div>
-
-        <Pagination
-          page={currentPage}
-          totalPages={totalPages}
-          start={start}
-          count={pageItems.length}
-          total={featured.length}
-          onChange={setPage}
-        />
-      </div>
-    </section>
-  );
-}
 
 
 function Footer() {
