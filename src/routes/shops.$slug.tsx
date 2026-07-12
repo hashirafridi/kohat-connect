@@ -377,53 +377,7 @@ function ShopDetailPage() {
         </div>
       </section>
 
-      {/* Related */}
-      {related.length > 0 && (
-        <section className="mx-auto mt-20 max-w-7xl px-6">
-          <div className="mb-6 flex items-end justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                More like this
-              </p>
-              <h2 className="mt-1 font-display text-2xl font-semibold">
-                Other {shop.categoryLabel.toLowerCase()} in Kohat
-              </h2>
-            </div>
-            <Link
-              to="/shops"
-              search={{ q: "", category: shop.category, area: "", sort: "featured" }}
-              className="hidden text-sm text-primary hover:underline sm:inline"
-            >
-              See all →
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((r) => (
-              <Link
-                key={r.slug}
-                to="/shops/$slug"
-                params={{ slug: r.slug }}
-                className="group overflow-hidden rounded-sm border border-border bg-card transition hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={r.image}
-                    alt={r.name}
-                    className="aspect-[4/3] w-full object-cover transition duration-700 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-4">
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                    {r.categoryLabel} · {r.area}
-                  </p>
-                  <p className="mt-1 font-display text-lg font-semibold">{r.name}</p>
-                  <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{r.tagline}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
+      <FeaturedShops />
 
       <Footer />
     </div>
