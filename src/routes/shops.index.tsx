@@ -833,7 +833,7 @@ function MapSection({ shops: list }: { shops: Shop[] }) {
 
 function FeaturedSection() {
   const featured = useMemo(() => shops.filter((s) => s.featured), []);
-  const PAGE_SIZE = 6;
+  const PAGE_SIZE = 8;
   const [page, setPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil(featured.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
