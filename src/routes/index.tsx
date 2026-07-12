@@ -31,6 +31,7 @@ import {
   socials,
 } from "@/data/home";
 import { FeaturedShops } from "@/components/FeaturedShops";
+import { useShops } from "@/hooks/use-shops";
 
 export const Route = createFileRoute("/")({
   component: Home,
