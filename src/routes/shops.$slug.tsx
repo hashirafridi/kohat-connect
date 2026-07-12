@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { useState } from "react";
 import {
   Phone,
