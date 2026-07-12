@@ -30,6 +30,8 @@ export const Route = createFileRoute("/admin/shops/new")({
 type WebpImage = { name: string; dataUrl: string; blob: Blob };
 type HourRow = { day: string; open: string; close: string };
 
+const MAX_GALLERY_IMAGES = 6;
+
 const DEFAULT_HOURS: HourRow[] = [
   { day: "Monday", open: "10:00", close: "22:00" },
   { day: "Tuesday", open: "10:00", close: "22:00" },
