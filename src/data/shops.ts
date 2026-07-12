@@ -20,7 +20,47 @@ export type Shop = {
   phone: string;
   tagline: string;
   featured?: boolean;
+  // Optional details for the single-shop page. Fall back to sensible defaults.
+  email?: string;
+  address?: string;
+  hours?: { day: string; open: string }[];
+  gallery?: string[];
+  about?: string;
+  established?: string;
+  facebook?: string;
+  instagram?: string;
+  website?: string;
 };
+
+/** Look up a shop by slug and enrich with defaults for the detail page. */
+export function getShopBySlug(slug: string) {
+  const shop = shops.find((s) => s.slug === slug);
+  if (!shop) return undefined;
+  const gallery = shop.gallery ?? [
+    shop.image,
+    heroBazaar,
+    shopFabric,
+    shopCafe,
+    shopRestaurant,
+    shopMobile,
+  ];
+  const hours = shop.hours ?? [
+    { day: "Monday – Thursday", open: "10:00 AM – 10:00 PM" },
+    { day: "Friday", open: "2:30 PM – 10:30 PM" },
+    { day: "Saturday – Sunday", open: "10:00 AM – 11:00 PM" },
+  ];
+  return {
+    ...shop,
+    email: shop.email ?? `contact@${shop.slug}.pk`,
+    address: shop.address ?? `Near main chowk, ${shop.area}, Kohat, KPK`,
+    hours,
+    gallery,
+    about:
+      shop.about ??
+      `${shop.name} is a well-known ${shop.categoryLabel.toLowerCase()} spot located on ${shop.area}. ${shop.tagline} Loved by locals, easy to find, and open through the week.`,
+    established: shop.established ?? "Est. 2015",
+  };
+}
 
 export const areas = [
   "Bannu Road",
