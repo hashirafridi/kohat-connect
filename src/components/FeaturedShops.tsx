@@ -19,48 +19,48 @@ export function ShopCard({ shop: s }: { shop: Shop }) {
           width={900}
           height={700}
           loading="lazy"
-          className="aspect-[4/3] w-full object-cover transition duration-700 group-hover:scale-105"
+          className="aspect-[16/11] w-full object-cover transition duration-700 group-hover:scale-105 sm:aspect-[4/3]"
         />
-        <span className="absolute left-3 top-3 rounded-sm bg-background/95 px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-foreground">
+        <span className="absolute left-2 top-2 rounded-sm bg-background/95 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-foreground sm:left-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-xs">
           {s.categoryLabel}
         </span>
         {s.featured && (
-          <span className="absolute right-3 top-3 rounded-sm bg-accent px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-accent-foreground">
+          <span className="absolute right-2 top-2 rounded-sm bg-accent px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-accent-foreground sm:right-3 sm:top-3 sm:px-2.5 sm:py-1 sm:text-xs">
             Featured
           </span>
         )}
       </Link>
-      <div className="flex flex-1 flex-col gap-3 p-5">
+      <div className="flex flex-1 flex-col gap-2 p-3 sm:gap-3 sm:p-5">
         <div>
           <Link
             to="/shops/$slug"
             params={{ slug: s.slug }}
-            className="font-display text-lg font-semibold text-foreground transition hover:text-primary"
+            className="font-display text-base font-semibold text-foreground transition hover:text-primary sm:text-lg"
           >
             {s.name}
           </Link>
-          <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin className="h-3.5 w-3.5" />
+          <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground sm:mt-1 sm:text-sm">
+            <MapPin className="h-3 w-3" />
             {s.area}
           </p>
         </div>
-        <p className="text-sm text-muted-foreground">{s.tagline}</p>
-        <div className="mt-auto flex items-center gap-2 border-t border-border pt-4">
+        <p className="line-clamp-2 text-xs text-muted-foreground sm:text-sm">{s.tagline}</p>
+        <div className="mt-auto flex items-center gap-2 border-t border-border pt-3 sm:pt-4">
           <a
             href={`https://wa.me/${s.whatsapp.replace(/\D/g, "")}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-sm bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
+            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-sm bg-primary px-2.5 py-1.5 text-xs font-medium text-primary-foreground transition hover:bg-primary/90 sm:px-3 sm:py-2 sm:text-sm"
           >
-            <MessageCircle className="h-4 w-4" />
+            <MessageCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             WhatsApp
           </a>
           <a
             href={`tel:${s.phone}`}
-            className="inline-flex items-center justify-center gap-2 rounded-sm border border-border bg-background px-3 py-2 text-sm font-medium text-foreground transition hover:border-primary/40 hover:text-primary"
+            className="inline-flex items-center justify-center gap-1.5 rounded-sm border border-border bg-background px-2.5 py-1.5 text-xs font-medium text-foreground transition hover:border-primary/40 hover:text-primary sm:px-3 sm:py-2 sm:text-sm"
             aria-label={`Call ${s.name}`}
           >
-            <Phone className="h-4 w-4" />
+            <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             Call
           </a>
         </div>
