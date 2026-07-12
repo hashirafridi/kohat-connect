@@ -107,7 +107,7 @@ function ShopsPage() {
         }
       />
 
-      <section className="mx-auto max-w-7xl px-6 pb-24">
+      <section className="mx-auto max-w-7xl px-6 pb-24 pt-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
           {/* Filters — desktop */}
           <aside className="hidden lg:col-span-3 lg:block">
