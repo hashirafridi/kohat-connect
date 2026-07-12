@@ -51,7 +51,7 @@ export const DEFAULT_HOURS: HourRow[] = [
   { day: "Thursday", open: "10:00", close: "22:00" },
   { day: "Friday", open: "14:30", close: "22:30" },
   { day: "Saturday", open: "10:00", close: "23:00" },
-  { day: "Sunday", open: "10:00", close: "23:00" },ss
+  { day: "Sunday", open: "10:00", close: "23:00" },
 ];
 
 export const EMPTY_SHOP: ShopFormValues = {
