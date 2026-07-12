@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Pencil, Plus, Search, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { shops } from "@/data/shops";
+import { useShops } from "@/hooks/use-shops";
 
 export const Route = createFileRoute("/admin/shops/")({
   head: () => ({
