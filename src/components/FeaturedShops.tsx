@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { MessageCircle, Phone, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { shops } from "@/data/shops";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useShops } from "@/hooks/use-shops";
 
 export interface ShopCardItem {
   slug: string;
