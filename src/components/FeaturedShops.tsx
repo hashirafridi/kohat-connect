@@ -129,7 +129,7 @@ export function Pagination({
   );
 }
 
-export function FeaturedShops() {
+export function FeaturedShops({ className }: { className?: string }) {
   const featured = useMemo(() => shops.filter((s) => s.featured), []);
   const PAGE_SIZE = 8;
   const [page, setPage] = useState(1);
@@ -139,7 +139,7 @@ export function FeaturedShops() {
   const pageItems = featured.slice(start, start + PAGE_SIZE);
 
   return (
-    <section className="border-t border-border bg-background px-6 py-16">
+    <section className={cn("border-t border-border bg-background px-6 py-16", className)}>
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
           <div>
