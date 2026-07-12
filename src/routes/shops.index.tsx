@@ -231,9 +231,7 @@ function ShopsPage() {
       </section>
 
       <MapSection shops={filtered} />
-      <FeaturedSection />
-
-
+      <FeaturedShops />
 
       {/* Mobile filter drawer */}
       {filtersOpen && (
