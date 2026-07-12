@@ -149,36 +149,90 @@ function ShopsPage() {
                   }
                 />
               </div>
-              <label className="hidden items-center gap-2 text-sm text-muted-foreground sm:flex">
-                Sort
-                <select
-                  value={sort}
-                  onChange={(e) =>
-                    navigate({
-                      search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, sort: e.target.value }),
-                    })
-                  }
-                  className="rounded-sm border border-border bg-card px-2 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
-                >
-                  <option value="featured">Featured first</option>
-                  <option value="name">Name A–Z</option>
-                  <option value="area">Area</option>
-                </select>
-              </label>
+              <div className="flex items-center gap-3">
+                <div className="hidden items-center gap-1 rounded-sm border border-border bg-card p-1 sm:flex">
+                  <button
+                    type="button"
+                    onClick={() => setView("grid")}
+                    aria-label="Grid view"
+                    aria-pressed={view === "grid"}
+                    className={`inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1.5 text-xs font-medium transition ${
+                      view === "grid"
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <LayoutGrid className="h-3.5 w-3.5" />
+                    Grid
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setView("list")}
+                    aria-label="List view"
+                    aria-pressed={view === "list"}
+                    className={`inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1.5 text-xs font-medium transition ${
+                      view === "list"
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <ListIcon className="h-3.5 w-3.5" />
+                    List
+                  </button>
+                </div>
+                <label className="hidden items-center gap-2 text-sm text-muted-foreground sm:flex">
+                  Sort
+                  <select
+                    value={sort}
+                    onChange={(e) =>
+                      navigate({
+                        search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, sort: e.target.value }),
+                      })
+                    }
+                    className="rounded-sm border border-border bg-card px-2 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  >
+                    <option value="featured">Featured first</option>
+                    <option value="name">Name A–Z</option>
+                    <option value="area">Area</option>
+                  </select>
+                </label>
+              </div>
             </div>
 
             {filtered.length === 0 ? (
               <EmptyState />
             ) : (
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {filtered.map((s) => (
-                  <ShopCard key={s.slug} shop={s} />
-                ))}
-              </div>
+              <>
+                {view === "grid" ? (
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                    {pageItems.map((s) => (
+                      <ShopCard key={s.slug} shop={s} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-4">
+                    {pageItems.map((s) => (
+                      <ShopRow key={s.slug} shop={s} />
+                    ))}
+                  </div>
+                )}
+
+                <Pagination
+                  page={currentPage}
+                  totalPages={totalPages}
+                  start={start}
+                  count={pageItems.length}
+                  total={filtered.length}
+                  onChange={setPage}
+                />
+              </>
             )}
           </div>
         </div>
       </section>
+
+      <MapSection shops={filtered} />
+
 
       {/* Mobile filter drawer */}
       {filtersOpen && (
