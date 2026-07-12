@@ -21,11 +21,10 @@ function CreateShopPage() {
   async function handleSubmit(values: ShopFormValues) {
     try {
       toast.loading("Creating shop…", { id: "create-shop" });
-      const shop = await createShop(values);
+      await createShop(values);
       await qc.invalidateQueries({ queryKey: ["shops"] });
       toast.success("Shop created", { id: "create-shop" });
       navigate({ to: "/admin/shops" });
-      return shop;
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Failed to create shop";
       toast.error(msg, { id: "create-shop" });
