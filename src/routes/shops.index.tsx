@@ -54,6 +54,9 @@ function ShopsPage() {
   const navigate = Route.useNavigate();
   const [qInput, setQInput] = useState(q);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [view, setView] = useState<"grid" | "list">("grid");
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 6;
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
