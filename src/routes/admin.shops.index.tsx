@@ -134,11 +134,42 @@ function AdminShopsList() {
                     )}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <Button asChild size="sm" variant="outline">
-                      <Link to="/admin/shops/$slug/edit" params={{ slug: s.slug }}>
-                        <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
-                      </Link>
-                    </Button>
+                    <div className="flex justify-end gap-2">
+                      <Button asChild size="sm" variant="outline">
+                        <Link to="/admin/shops/$slug/edit" params={{ slug: s.slug }}>
+                          <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
+                        </Link>
+                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-destructive hover:text-destructive"
+                            disabled={deletingSlug === s.slug}
+                          >
+                            <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete {s.name}?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This permanently removes the shop, its coordinates, and uploaded images. This cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDelete(s.slug, s.name)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
                   </td>
                 </tr>
               ))}
