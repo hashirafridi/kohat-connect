@@ -377,7 +377,7 @@ function ShopDetailPage() {
         </div>
       </section>
 
-      <FeaturedShops />
+      <FeaturedShops className="mt-4" />
 
       <Footer />
     </div>
