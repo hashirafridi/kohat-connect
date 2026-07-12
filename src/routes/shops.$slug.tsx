@@ -169,6 +169,32 @@ function ShopDetailPage() {
                 </div>
               </div>
             </div>
+
+            {/* Social links below the banner image */}
+            <div className="mt-4 flex items-center gap-3">
+              {shop.facebook && (
+                <a
+                  href={shop.facebook}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-sm border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:border-[#1877F2]/40 hover:text-[#1877F2]"
+                >
+                  <Facebook className="h-4 w-4" />
+                  Facebook
+                </a>
+              )}
+              {shop.instagram && (
+                <a
+                  href={shop.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-sm border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:border-[#E4405F]/40 hover:text-[#E4405F]"
+                >
+                  <Instagram className="h-4 w-4" />
+                  Instagram
+                </a>
+              )}
+            </div>
           </div>
 
           {/* Contact + map */}
