@@ -107,7 +107,7 @@ function ShopsPage() {
         }
       />
 
-      <section className="mx-auto max-w-7xl px-6 pb-24">
+      <section className="mx-auto max-w-7xl px-6 pb-24 pt-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
           {/* Filters — desktop */}
           <aside className="hidden lg:col-span-3 lg:block">
@@ -277,6 +277,9 @@ function ShopsPage() {
 /* ------------ Sub-components ------------ */
 
 function TopBar() {
+  const scrollToMap = () =>
+    document.getElementById("shops-map")?.scrollIntoView({ behavior: "smooth", block: "start" });
+
   return (
     <header className="border-b border-border bg-background">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -287,6 +290,14 @@ function TopBar() {
           <span className="font-urdu text-lg text-muted-foreground">کوہاٹ</span>
         </Link>
         <nav className="flex items-center gap-2">
+          <button
+            onClick={scrollToMap}
+            aria-label="Jump to map"
+            className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+          >
+            <MapPin className="h-4 w-4" />
+            Map
+          </button>
           <a
             href={socials.facebook}
             target="_blank"
@@ -764,7 +775,7 @@ function MapSection({ shops: list }: { shops: Shop[] }) {
   }, []);
 
   return (
-    <section className="border-t border-border bg-secondary/40 px-6 py-16">
+    <section id="shops-map" className="border-t border-border bg-secondary/40 px-6 py-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
