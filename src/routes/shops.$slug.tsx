@@ -356,23 +356,6 @@ function ShopDetailPage() {
               <StatCard label="Since" value={shop.established} />
             </div>
 
-            <div className="mt-10">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                What people come for
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {["Fresh daily", "Home delivery", "Card accepted", "Family seating", "Parking"].map(
-                  (tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-sm border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ),
-                )}
-              </div>
-            </div>
           </div>
 
           <aside className="lg:col-span-4">
