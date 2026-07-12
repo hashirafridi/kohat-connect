@@ -119,3 +119,39 @@ export async function updateShop(originalSlug: string, values: ShopFormValues) {
 
   return shop;
 }
+
+export async function deleteShop(slug: string) {
+  // Get shop id + gallery/cover to clean up storage
+  const { data: shop, error: fetchErr } = await supabase
+    .from("shops")
+    .select("id, cover_image, gallery")
+    .eq("slug", slug)
+    .single();
+  if (fetchErr) throw new Error(fetchErr.message);
+
+  // Delete coordinates first (FK)
+  const { error: coordErr } = await supabase
+    .from("shop_coordinates")
+    .delete()
+    .eq("shop_id", shop.id);
+  if (coordErr) throw new Error(`Coordinates: ${coordErr.message}`);
+
+  // Delete shop row
+  const { error: delErr } = await supabase.from("shops").delete().eq("id", shop.id);
+  if (delErr) throw new Error(delErr.message);
+
+  // Best-effort storage cleanup — collect paths from public URLs
+  const urls: string[] = [shop.cover_image, ...(shop.gallery ?? [])].filter(Boolean);
+  const prefix = `/storage/v1/object/public/${BUCKET}/`;
+  const paths = urls
+    .map((u) => {
+      const i = u.indexOf(prefix);
+      return i === -1 ? null : u.slice(i + prefix.length);
+    })
+    .filter((p): p is string => !!p);
+  if (paths.length > 0) {
+    await supabase.storage.from(BUCKET).remove(paths);
+  }
+
+  return { id: shop.id };
+}
