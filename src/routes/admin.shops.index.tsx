@@ -31,7 +31,29 @@ export const Route = createFileRoute("/admin/shops/")({
 
 function AdminShopsList() {
   const [q, setQ] = useState("");
+  const [deletingSlug, setDeletingSlug] = useState<string | null>(null);
   const { shops, usingFallback, isLoading } = useShops();
+  const qc = useQueryClient();
+
+  async function handleDelete(slug: string, name: string) {
+    if (usingFallback) {
+      toast.error("Can't delete sample data. Create a shop first.");
+      return;
+    }
+    try {
+      setDeletingSlug(slug);
+      toast.loading(`Deleting ${name}…`, { id: `del-${slug}` });
+      await deleteShop(slug);
+      await qc.invalidateQueries({ queryKey: ["shops"] });
+      await qc.invalidateQueries({ queryKey: ["shop", slug] });
+      toast.success("Shop deleted", { id: `del-${slug}` });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Failed to delete shop";
+      toast.error(msg, { id: `del-${slug}` });
+    } finally {
+      setDeletingSlug(null);
+    }
+  }
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
