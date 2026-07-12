@@ -4,8 +4,6 @@ import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import {
   Search,
-  Phone,
-  MessageCircle,
   Facebook,
   Mail,
   MapPin,
@@ -14,13 +12,12 @@ import {
   X,
   LayoutGrid,
   List as ListIcon,
-  ChevronLeft,
-  ChevronRight,
   Navigation,
 } from "lucide-react";
 import { shops, areas, type Shop } from "@/data/shops";
 import { categories } from "@/data/home";
 import { socials } from "@/data/home";
+import { ShopCard, FeaturedShops } from "@/components/FeaturedShops";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
