@@ -57,10 +57,11 @@ function ShopsPage() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 6;
+  const { shops } = useShops();
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    let list = shops.filter((s) => {
+    let list = shops.filter((s: Shop) => {
       if (category && s.category !== category) return false;
       if (area && s.area !== area) return false;
       if (needle) {
