@@ -16,7 +16,7 @@ import {
   Star,
   BadgeCheck,
 } from "lucide-react";
-import { shops, enrichShop } from "@/data/shops";
+import { enrichShop } from "@/data/shops";
 import { fetchShopBySlugWithFallback } from "@/data/shops-db";
 import { socials } from "@/data/home";
 import { FeaturedShops } from "@/components/FeaturedShops";
