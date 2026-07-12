@@ -17,6 +17,10 @@ import {
   Smartphone,
   ShoppingBasket,
   BusFront,
+  Sparkles,
+  Compass,
+  MousePointerClick,
+  PhoneCall,
 } from "lucide-react";
 import {
   heroImages,
@@ -50,6 +54,8 @@ function Home() {
       <SearchStrip />
       <CategoryChips />
       <Featured />
+      <RecentlyAdded />
+      <HowItWorks />
       <AboutStrip />
       <Footer />
     </div>
