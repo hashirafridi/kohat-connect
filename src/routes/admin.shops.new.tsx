@@ -505,7 +505,12 @@ function CreateShopPage() {
             </div>
 
             <div>
-              <Label className="mb-2 block">Gallery images</Label>
+              <div className="mb-2 flex items-center justify-between">
+                <Label>Gallery images</Label>
+                <span className="text-xs text-muted-foreground">
+                  {gallery.length} / {MAX_GALLERY_IMAGES}
+                </span>
+              </div>
               <div className="flex flex-wrap gap-3">
                 {gallery.map((g, i) => (
                   <div key={i} className="relative">
@@ -526,18 +531,25 @@ function CreateShopPage() {
                     </button>
                   </div>
                 ))}
-                <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed text-xs text-muted-foreground hover:bg-muted/50">
-                  <Plus className="mb-0.5 h-4 w-4" />
-                  Add
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    onChange={(e) => handleGallery(e.target.files)}
-                  />
-                </label>
+                {gallery.length < MAX_GALLERY_IMAGES && (
+                  <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed text-xs text-muted-foreground hover:bg-muted/50">
+                    <Plus className="mb-0.5 h-4 w-4" />
+                    Add
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      onChange={(e) => handleGallery(e.target.files)}
+                    />
+                  </label>
+                )}
               </div>
+              {gallery.length === MAX_GALLERY_IMAGES && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Maximum of {MAX_GALLERY_IMAGES} gallery images reached.
+                </p>
+              )}
             </div>
 
             {converting ? (
