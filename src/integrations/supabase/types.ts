@@ -14,7 +14,116 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      shop_coordinates: {
+        Row: {
+          created_at: string
+          id: string
+          lat: number
+          lng: number
+          shop_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lat: number
+          lng: number
+          shop_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lat?: number
+          lng?: number
+          shop_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shop_coordinates_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: true
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shops: {
+        Row: {
+          about: string | null
+          address: string | null
+          area: string
+          category: string
+          category_label: string
+          cover_image: string
+          created_at: string
+          email: string | null
+          established: string | null
+          facebook: string | null
+          featured: boolean
+          gallery: string[]
+          hours: Json
+          id: string
+          instagram: string | null
+          name: string
+          phone: string
+          slug: string
+          tagline: string
+          updated_at: string
+          website: string | null
+          whatsapp: string
+        }
+        Insert: {
+          about?: string | null
+          address?: string | null
+          area: string
+          category: string
+          category_label: string
+          cover_image: string
+          created_at?: string
+          email?: string | null
+          established?: string | null
+          facebook?: string | null
+          featured?: boolean
+          gallery?: string[]
+          hours?: Json
+          id?: string
+          instagram?: string | null
+          name: string
+          phone?: string
+          slug: string
+          tagline?: string
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string
+        }
+        Update: {
+          about?: string | null
+          address?: string | null
+          area?: string
+          category?: string
+          category_label?: string
+          cover_image?: string
+          created_at?: string
+          email?: string | null
+          established?: string | null
+          facebook?: string | null
+          featured?: boolean
+          gallery?: string[]
+          hours?: Json
+          id?: string
+          instagram?: string | null
+          name?: string
+          phone?: string
+          slug?: string
+          tagline?: string
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
