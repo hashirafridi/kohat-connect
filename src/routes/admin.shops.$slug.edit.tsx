@@ -55,7 +55,7 @@ function EditShopPage() {
     lat: String(shop.lat),
     lng: String(shop.lng),
     cover: { name: `${shop.slug}-cover.webp`, dataUrl: shop.image },
-    gallery: (shop.gallery ?? []).map((src, i) => ({
+    gallery: (shop.gallery ?? []).map((src: string, i: number) => ({
       name: `${shop.slug}-gallery-${i}.webp`,
       dataUrl: src,
     })),
