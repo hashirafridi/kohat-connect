@@ -87,7 +87,7 @@ function ShopsPage() {
   const pageItems = filtered.slice(start, start + PAGE_SIZE);
 
   // Reset to page 1 whenever filters/sort change
-  useMemo(() => {
+  useEffect(() => {
     setPage(1);
   }, [q, category, area, sort]);
 
