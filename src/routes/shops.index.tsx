@@ -565,64 +565,6 @@ function ActiveChips({
   );
 }
 
-function ShopCard({ shop: s }: { shop: Shop }) {
-  return (
-    <article className="group flex flex-col overflow-hidden rounded-sm border border-border bg-card transition hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_oklch(0.22_0.03_45_/_0.35)]">
-      <a href={`/shops/${s.slug}`} className="relative block overflow-hidden">
-        <img
-          src={s.image}
-          alt={s.name}
-          width={900}
-          height={700}
-          loading="lazy"
-          className="aspect-[4/3] w-full object-cover transition duration-700 group-hover:scale-105"
-        />
-        <span className="absolute left-3 top-3 rounded-sm bg-background/95 px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-foreground">
-          {s.categoryLabel}
-        </span>
-        {s.featured && (
-          <span className="absolute right-3 top-3 rounded-sm bg-accent px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-accent-foreground">
-            Featured
-          </span>
-        )}
-      </a>
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div>
-          <a
-            href={`/shops/${s.slug}`}
-            className="font-display text-lg font-semibold text-foreground transition hover:text-primary"
-          >
-            {s.name}
-          </a>
-          <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin className="h-3.5 w-3.5" />
-            {s.area}
-          </p>
-        </div>
-        <p className="text-sm text-muted-foreground">{s.tagline}</p>
-        <div className="mt-auto flex items-center gap-2 border-t border-border pt-4">
-          <a
-            href={`https://wa.me/${s.whatsapp.replace(/\D/g, "")}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-sm bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-          >
-            <MessageCircle className="h-4 w-4" />
-            WhatsApp
-          </a>
-          <a
-            href={`tel:${s.phone}`}
-            className="inline-flex items-center justify-center gap-2 rounded-sm border border-border bg-background px-3 py-2 text-sm font-medium text-foreground transition hover:border-primary/40 hover:text-primary"
-            aria-label={`Call ${s.name}`}
-          >
-            <Phone className="h-4 w-4" />
-            Call
-          </a>
-        </div>
-      </div>
-    </article>
-  );
-}
 
 function EmptyState() {
   return (
