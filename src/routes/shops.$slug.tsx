@@ -358,7 +358,7 @@ function ShopDetailPage() {
                 Opening hours
               </p>
               <ul className="mt-4 divide-y divide-border text-sm">
-                {shop.hours.map((h) => (
+                {shop.hours.map((h: { day: string; open: string }) => (
                   <li key={h.day} className="flex items-center justify-between py-2.5">
                     <span className="text-muted-foreground">{h.day}</span>
                     <span className="font-medium text-foreground">{h.open}</span>
