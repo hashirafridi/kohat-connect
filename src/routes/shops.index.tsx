@@ -16,7 +16,8 @@ import {
   List as ListIcon,
   Navigation,
 } from "lucide-react";
-import { shops, areas, type Shop } from "@/data/shops";
+import { areas, type Shop } from "@/data/shops";
+import { useShops } from "@/hooks/use-shops";
 import { categories } from "@/data/home";
 import { socials } from "@/data/home";
 import { ShopCard, Pagination, FeaturedShops } from "@/components/FeaturedShops";
@@ -56,10 +57,11 @@ function ShopsPage() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 6;
+  const { shops } = useShops();
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    let list = shops.filter((s) => {
+    let list = shops.filter((s: Shop) => {
       if (category && s.category !== category) return false;
       if (area && s.area !== area) return false;
       if (needle) {
@@ -78,7 +80,7 @@ function ShopsPage() {
       );
     }
     return list;
-  }, [q, category, area, sort]);
+  }, [q, category, area, sort, shops]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);

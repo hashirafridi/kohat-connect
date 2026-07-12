@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Pencil, Plus, Search, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { shops } from "@/data/shops";
+import { useShops } from "@/hooks/use-shops";
 
 export const Route = createFileRoute("/admin/shops/")({
   head: () => ({
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/admin/shops/")({
 
 function AdminShopsList() {
   const [q, setQ] = useState("");
+  const { shops, usingFallback, isLoading } = useShops();
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -28,7 +29,7 @@ function AdminShopsList() {
         s.categoryLabel.toLowerCase().includes(term) ||
         s.area.toLowerCase().includes(term),
     );
-  }, [q]);
+  }, [q, shops]);
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -117,7 +118,9 @@ function AdminShopsList() {
         </div>
 
         <p className="text-xs text-muted-foreground">
-          Showing {filtered.length} of {shops.length} shops.
+          {isLoading
+            ? "Loading shops…"
+            : `Showing ${filtered.length} of ${shops.length} shops.${usingFallback ? " (Showing sample data — no shops in the database yet.)" : ""}`}
         </p>
       </div>
     </div>

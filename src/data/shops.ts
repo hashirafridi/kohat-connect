@@ -35,10 +35,8 @@ export type Shop = {
   website?: string;
 };
 
-/** Look up a shop by slug and enrich with defaults for the detail page. */
-export function getShopBySlug(slug: string) {
-  const shop = shops.find((s) => s.slug === slug);
-  if (!shop) return undefined;
+/** Enrich a shop with sensible fallbacks for the detail page. */
+export function enrichShop(shop: Shop) {
   const gallery = shop.gallery ?? [
     shop.image,
     heroBazaar,
@@ -63,6 +61,13 @@ export function getShopBySlug(slug: string) {
       `${shop.name} is a well-known ${shop.categoryLabel.toLowerCase()} spot located on ${shop.area}. ${shop.tagline} Loved by locals, easy to find, and open through the week.`,
     established: shop.established ?? "Est. 2015",
   };
+}
+
+/** Look up a shop by slug (fake data only) and enrich with defaults. */
+export function getShopBySlug(slug: string) {
+  const shop = shops.find((s) => s.slug === slug);
+  if (!shop) return undefined;
+  return enrichShop(shop);
 }
 
 export const areas = [

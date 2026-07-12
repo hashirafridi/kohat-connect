@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { MessageCircle, Phone, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { shops } from "@/data/shops";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useShops } from "@/hooks/use-shops";
 
 export interface ShopCardItem {
   slug: string;
@@ -164,8 +164,9 @@ export function FeaturedShops({
   linkHref?: string;
   linkLabel?: string;
 }) {
-  const defaultItems = useMemo(() => shops.filter((s) => s.featured), []);
-  const source = items ?? defaultItems;
+  const { shops } = useShops();
+  const defaultItems = useMemo(() => shops.filter((s) => s.featured), [shops]);
+  const source: ShopCardItem[] = items ?? defaultItems;
   const isMobile = useIsMobile();
   const PAGE_SIZE = isMobile ? 3 : 8;
   const [page, setPage] = useState(1);

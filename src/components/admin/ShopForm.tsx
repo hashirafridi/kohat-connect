@@ -114,7 +114,7 @@ type Props = {
   mode: "create" | "edit";
   initial?: Partial<ShopFormValues>;
   submitLabel?: string;
-  onSubmit?: (values: ShopFormValues) => void;
+  onSubmit?: (values: ShopFormValues) => void | Promise<void>;
 };
 
 export function ShopForm({ mode, initial, submitLabel, onSubmit }: Props) {
@@ -220,16 +220,20 @@ export function ShopForm({ mode, initial, submitLabel, onSubmit }: Props) {
       gallery,
       hours,
     };
-    if (onSubmit) onSubmit(values);
-    else {
-      console.log(`[admin] ${mode} shop payload`, values);
-      toast.success(
-        mode === "create"
-          ? "Shop draft ready (not yet saved to database)"
-          : "Shop update ready (not yet saved to database)",
-      );
+    try {
+      if (onSubmit) {
+        await onSubmit(values);
+      } else {
+        console.log(`[admin] ${mode} shop payload`, values);
+        toast.success(
+          mode === "create"
+            ? "Shop draft ready (not yet saved to database)"
+            : "Shop update ready (not yet saved to database)",
+        );
+      }
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitting(false);
   }
 
   return (

@@ -16,15 +16,16 @@ import {
   Star,
   BadgeCheck,
 } from "lucide-react";
-import { getShopBySlug, shops } from "@/data/shops";
+import { enrichShop } from "@/data/shops";
+import { fetchShopBySlugWithFallback } from "@/data/shops-db";
 import { socials } from "@/data/home";
 import { FeaturedShops } from "@/components/FeaturedShops";
 
 export const Route = createFileRoute("/shops/$slug")({
-  loader: ({ params }) => {
-    const shop = getShopBySlug(params.slug);
+  loader: async ({ params }) => {
+    const shop = await fetchShopBySlugWithFallback(params.slug);
     if (!shop) throw notFound();
-    return { shop };
+    return { shop: enrichShop(shop) };
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
