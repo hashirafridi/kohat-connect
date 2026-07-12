@@ -297,7 +297,7 @@ function ShopDetailPage() {
             </div>
           </div>
           <div className="grid grid-cols-3 gap-3 md:grid-cols-2">
-            {shop.gallery.map((img, i) => (
+            {shop.gallery.map((img: string, i: number) => (
               <button
                 key={i}
                 onClick={() => setActiveIdx(i)}
