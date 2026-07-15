@@ -80,7 +80,7 @@ function TopBar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         <Link to="/" className="flex items-baseline gap-2">
           <span className="font-display text-2xl font-semibold tracking-tight text-primary-foreground drop-shadow-sm">
-            Kohat<span className="text-accent">Shops</span>
+            Kohat<span className="text-accent">Business</span>
           </span>
           <span className="font-urdu text-lg text-primary-foreground/85">
             کوہاٹ
@@ -509,7 +509,7 @@ function Footer() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-14 sm:grid-cols-3">
         <div>
           <p className="font-display text-2xl font-semibold">
-            Kohat<span className="text-accent">Shops</span>
+            Kohat<span className="text-accent">Business</span>
           </p>
           <p className="mt-3 max-w-xs text-sm text-primary-foreground/70">
             A community directory for every shop, café, stall and business

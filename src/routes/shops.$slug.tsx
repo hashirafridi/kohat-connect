@@ -422,7 +422,7 @@ function TopBar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-baseline gap-2">
           <span className="font-display text-2xl font-semibold tracking-tight text-foreground">
-            Kohat<span className="text-primary">Shops</span>
+            Kohat<span className="text-primary">Business</span>
           </span>
           <span className="font-urdu text-lg text-muted-foreground">کوہاٹ</span>
         </Link>
