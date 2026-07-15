@@ -31,13 +31,13 @@ export const Route = createFileRoute("/shops/$slug")({
     if (!loaderData) {
       return {
         meta: [
-          { title: "Shop not found — Kohat Shops" },
+          { title: "Business not found — Kohat Business Directory" },
           { name: "robots", content: "noindex" },
         ],
       };
     }
     const { shop } = loaderData;
-    const title = `${shop.name} — ${shop.categoryLabel} in ${shop.area}, Kohat`;
+    const title = `${shop.name} — ${shop.subcategoryLabel ?? shop.categoryLabel} in ${shop.area}, Kohat`;
     const description = `${shop.tagline} Contact ${shop.name} on ${shop.area}, Kohat.`;
     return {
       meta: [
@@ -55,7 +55,7 @@ export const Route = createFileRoute("/shops/$slug")({
       <h1 className="font-display text-2xl">Something went wrong</h1>
       <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
       <Link to="/shops" className="mt-6 inline-block text-primary hover:underline">
-        Back to all shops
+        Back to all businesses
       </Link>
     </div>
   ),
@@ -66,7 +66,7 @@ function ShopNotFound() {
   return (
     <div className="mx-auto max-w-xl px-6 py-24 text-center">
       <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">404</p>
-      <h1 className="mt-3 font-display text-3xl font-semibold">Shop not found</h1>
+      <h1 className="mt-3 font-display text-3xl font-semibold">Business not found</h1>
       <p className="mt-3 text-sm text-muted-foreground">
         The listing you are looking for isn't in the directory yet.
       </p>
@@ -74,7 +74,7 @@ function ShopNotFound() {
         to="/shops"
         className="mt-6 inline-flex items-center gap-2 rounded-sm bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
       >
-        Browse all shops
+        Browse all businesses
       </Link>
     </div>
   );
@@ -99,15 +99,27 @@ function ShopDetailPage() {
         <div className="mx-auto flex max-w-7xl items-center gap-2 px-6 py-3 text-xs text-muted-foreground">
           <Link to="/" className="hover:text-primary">Home</Link>
           <span>/</span>
-          <Link to="/shops" className="hover:text-primary">Shops</Link>
+          <Link to="/shops" className="hover:text-primary">Businesses</Link>
           <span>/</span>
           <Link
             to="/shops"
-            search={{ q: "", category: shop.category, area: "", sort: "featured" }}
+            search={{ q: "", category: shop.category, sub: "", area: "", sort: "featured" }}
             className="hover:text-primary"
           >
             {shop.categoryLabel}
           </Link>
+          {shop.subcategory && (
+            <>
+              <span>/</span>
+              <Link
+                to="/shops"
+                search={{ q: "", category: shop.category, sub: shop.subcategory, area: "", sort: "featured" }}
+                className="hover:text-primary"
+              >
+                {shop.subcategoryLabel}
+              </Link>
+            </>
+          )}
           <span>/</span>
           <span className="text-foreground">{shop.name}</span>
         </div>
@@ -120,7 +132,7 @@ function ShopDetailPage() {
           className="mb-5 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to all shops
+          Back to all businesses
         </Link>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
