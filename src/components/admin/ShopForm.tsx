@@ -61,6 +61,7 @@ export const EMPTY_SHOP: ShopFormValues = {
   name: "",
   slug: "",
   category: "",
+  subcategory: "",
   area: "",
   tagline: "",
   about: "",
