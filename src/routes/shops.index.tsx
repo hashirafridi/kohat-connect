@@ -348,7 +348,7 @@ function PageHeader({
         <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="font-display text-3xl font-semibold sm:text-4xl">
-              All shops in Kohat
+              All businesses in Kohat
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Showing <span className="font-medium text-foreground">{showing}</span> of{" "}
@@ -625,13 +625,13 @@ function ActiveChips({
 function EmptyState() {
   return (
     <div className="rounded-sm border border-dashed border-border bg-card px-6 py-16 text-center">
-      <p className="font-display text-2xl font-semibold">No shops match</p>
+      <p className="font-display text-2xl font-semibold">No businesses match</p>
       <p className="mt-2 text-sm text-muted-foreground">
         Try clearing a filter or searching with a different word.
       </p>
       <Link
         to="/shops"
-        search={{ q: "", category: "", area: "", sort: "featured" }}
+        search={{ q: "", category: "", sub: "", area: "", sort: "featured" }}
         className="mt-6 inline-flex items-center gap-2 rounded-sm bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
       >
         Reset filters
@@ -655,7 +655,7 @@ function ShopRow({ shop: s }: { shop: Shop }) {
           className="aspect-[4/3] h-full w-full object-cover transition duration-700 group-hover:scale-105 sm:aspect-auto"
         />
         <span className="absolute left-3 top-3 rounded-sm bg-background/95 px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-foreground">
-          {s.categoryLabel}
+          {s.subcategoryLabel ?? s.categoryLabel}
         </span>
         {s.featured && (
           <span className="absolute right-3 top-3 rounded-sm bg-accent px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-accent-foreground">
@@ -727,7 +727,7 @@ function MapSection({ shops: list }: { shops: Shop[] }) {
               Map view
             </p>
             <h2 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
-              Every shop on the map
+              Every business on the map
             </h2>
             <p className="mt-2 max-w-xl text-sm text-muted-foreground">
               Pins reflect your current filters. Click a pin for shop details.
@@ -759,7 +759,7 @@ function MapSection({ shops: list }: { shops: Shop[] }) {
 
         {list.length === 0 && (
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            No shops match — clear a filter to see pins.
+            No businesses match — clear a filter to see pins.
           </p>
         )}
       </div>
