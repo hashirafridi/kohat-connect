@@ -53,7 +53,7 @@ export const Route = createFileRoute("/shops/")({
 });
 
 function ShopsPage() {
-  const { q, category, area, sort } = Route.useSearch();
+  const { q, category, sub, area, sort } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [qInput, setQInput] = useState(q);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -66,9 +66,10 @@ function ShopsPage() {
     const needle = q.trim().toLowerCase();
     let list = shops.filter((s: Shop) => {
       if (category && s.category !== category) return false;
+      if (sub && s.subcategory !== sub) return false;
       if (area && s.area !== area) return false;
       if (needle) {
-        const hay = `${s.name} ${s.categoryLabel} ${s.area} ${s.tagline}`.toLowerCase();
+        const hay = `${s.name} ${s.categoryLabel} ${s.subcategoryLabel ?? ""} ${s.area} ${s.tagline}`.toLowerCase();
         if (!hay.includes(needle)) return false;
       }
       return true;
@@ -83,20 +84,19 @@ function ShopsPage() {
       );
     }
     return list;
-  }, [q, category, area, sort, shops]);
+  }, [q, category, sub, area, sort, shops]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const start = (currentPage - 1) * PAGE_SIZE;
   const pageItems = filtered.slice(start, start + PAGE_SIZE);
 
-  // Reset to page 1 whenever filters/sort change
   useEffect(() => {
     setPage(1);
-  }, [q, category, area, sort]);
+  }, [q, category, sub, area, sort]);
 
   const activeCount =
-    (q ? 1 : 0) + (category ? 1 : 0) + (area ? 1 : 0) + (sort !== "featured" ? 1 : 0);
+    (q ? 1 : 0) + (category ? 1 : 0) + (sub ? 1 : 0) + (area ? 1 : 0) + (sort !== "featured" ? 1 : 0);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
