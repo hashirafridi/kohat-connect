@@ -73,7 +73,7 @@ function AdminShopsList() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div>
             <p className="text-xs uppercase tracking-wider text-muted-foreground">Admin</p>
-            <h1 className="text-xl font-semibold">Shops</h1>
+            <h1 className="text-xl font-semibold">Businesses</h1>
           </div>
           <div className="flex items-center gap-2">
             <Link to="/shops" className="text-sm text-muted-foreground hover:text-foreground">
@@ -81,7 +81,7 @@ function AdminShopsList() {
             </Link>
             <Button asChild size="sm">
               <Link to="/admin/shops/new">
-                <Plus className="mr-1 h-4 w-4" /> Create shop
+                <Plus className="mr-1 h-4 w-4" /> Create business
               </Link>
             </Button>
           </div>
@@ -122,7 +122,12 @@ function AdminShopsList() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3">{s.categoryLabel}</td>
+                  <td className="px-4 py-3">
+                    <div>{s.categoryLabel}</div>
+                    {s.subcategoryLabel && (
+                      <div className="text-xs text-muted-foreground">{s.subcategoryLabel}</div>
+                    )}
+                  </td>
                   <td className="px-4 py-3">{s.area}</td>
                   <td className="px-4 py-3">
                     {s.featured ? (
