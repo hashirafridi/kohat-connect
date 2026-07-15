@@ -431,7 +431,7 @@ function TopBar() {
             to="/shops"
             className="hidden rounded-sm border border-border px-3 py-2 text-sm text-foreground transition hover:border-primary/40 hover:text-primary sm:inline-flex"
           >
-            All shops
+            All businesses
           </Link>
           <Link
             to="/about"
