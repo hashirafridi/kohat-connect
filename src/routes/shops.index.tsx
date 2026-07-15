@@ -18,28 +18,31 @@ import {
 } from "lucide-react";
 import { areas, type Shop } from "@/data/shops";
 import { useShops } from "@/hooks/use-shops";
-import { categories } from "@/data/home";
+import { mainCategories } from "@/data/categories";
 import { socials } from "@/data/home";
 import { ShopCard, Pagination, FeaturedShops } from "@/components/FeaturedShops";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
   category: fallback(z.string(), "").default(""),
+  sub: fallback(z.string(), "").default(""),
   area: fallback(z.string(), "").default(""),
   sort: fallback(z.string(), "featured").default("featured"),
 });
+
+type ShopSearch = z.infer<typeof searchSchema>;
 
 export const Route = createFileRoute("/shops/")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
-      { title: "All Shops in Kohat — Kohat Shops Directory" },
+      { title: "All Businesses in Kohat — Kohat Business Directory" },
       {
         name: "description",
         content:
-          "Browse every restaurant, café, biryani stall, bike shop, furniture store and more across Kohat.",
+          "Browse every business in Kohat — restaurants, cafés, biryani, bike shops, furniture, salons, workshops and more.",
       },
-      { property: "og:title", content: "All Shops in Kohat" },
+      { property: "og:title", content: "All Businesses in Kohat" },
       {
         property: "og:description",
         content: "The complete directory of local businesses in Kohat, KPK.",
