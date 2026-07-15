@@ -12,18 +12,22 @@ import shopBus from "@/assets/shop-bus.jpg";
 export type Shop = {
   slug: string;
   name: string;
-  category: string; // matches Category.key from home.ts
+  /** Main category key (e.g. "food-drinks"). */
+  category: string;
+  /** Main category label (e.g. "Food & Drinks"). */
   categoryLabel: string;
+  /** Sub category key (e.g. "biryani"). */
+  subcategory?: string;
+  /** Sub category label (e.g. "Biryani"). */
+  subcategoryLabel?: string;
   area: string;
   image: string;
   whatsapp: string;
   phone: string;
   tagline: string;
   featured?: boolean;
-  // Coordinates for map view (later fetched from DB).
   lat: number;
   lng: number;
-  // Optional details for the single-shop page. Fall back to sensible defaults.
   email?: string;
   address?: string;
   hours?: { day: string; open: string }[];
@@ -35,7 +39,6 @@ export type Shop = {
   website?: string;
 };
 
-/** Enrich a shop with sensible fallbacks for the detail page. */
 export function enrichShop(shop: Shop) {
   const gallery = shop.gallery ?? [
     shop.image,
@@ -50,6 +53,7 @@ export function enrichShop(shop: Shop) {
     { day: "Friday", open: "2:30 PM – 10:30 PM" },
     { day: "Saturday – Sunday", open: "10:00 AM – 11:00 PM" },
   ];
+  const displayLabel = shop.subcategoryLabel ?? shop.categoryLabel;
   return {
     ...shop,
     email: shop.email ?? `contact@${shop.slug}.pk`,
@@ -58,12 +62,11 @@ export function enrichShop(shop: Shop) {
     gallery,
     about:
       shop.about ??
-      `${shop.name} is a well-known ${shop.categoryLabel.toLowerCase()} spot located on ${shop.area}. ${shop.tagline} Loved by locals, easy to find, and open through the week.`,
+      `${shop.name} is a well-known ${displayLabel.toLowerCase()} located on ${shop.area}. ${shop.tagline} Loved by locals, easy to find, and open through the week.`,
     established: shop.established ?? "Est. 2015",
   };
 }
 
-/** Look up a shop by slug (fake data only) and enrich with defaults. */
 export function getShopBySlug(slug: string) {
   const shop = shops.find((s) => s.slug === slug);
   if (!shop) return undefined;
@@ -85,8 +88,10 @@ export const shops: Shop[] = [
   {
     slug: "shahi-biryani-house",
     name: "Shahi Biryani House",
-    category: "biryani",
-    categoryLabel: "Biryani",
+    category: "food-drinks",
+    categoryLabel: "Food & Drinks",
+    subcategory: "biryani",
+    subcategoryLabel: "Biryani",
     area: "Bannu Road",
     lat: 33.5772,
     lng: 71.4339,
@@ -99,8 +104,10 @@ export const shops: Shop[] = [
   {
     slug: "khyber-motors",
     name: "Khyber Motors",
-    category: "bikes",
-    categoryLabel: "Bikes",
+    category: "vehicles",
+    categoryLabel: "Vehicles",
+    subcategory: "bikes",
+    subcategoryLabel: "Bikes",
     area: "KDA Chowk",
     lat: 33.5982,
     lng: 71.4499,
@@ -113,8 +120,10 @@ export const shops: Shop[] = [
   {
     slug: "al-madina-furniture",
     name: "Al-Madina Furniture",
-    category: "furniture",
-    categoryLabel: "Furniture",
+    category: "shopping",
+    categoryLabel: "Shopping",
+    subcategory: "furniture",
+    subcategoryLabel: "Furniture Stores",
     area: "Pindi Road",
     lat: 33.5931,
     lng: 71.4533,
@@ -127,8 +136,10 @@ export const shops: Shop[] = [
   {
     slug: "chai-adda",
     name: "Chai Adda",
-    category: "cafes",
-    categoryLabel: "Cafés",
+    category: "food-drinks",
+    categoryLabel: "Food & Drinks",
+    subcategory: "cafes",
+    subcategoryLabel: "Cafés",
     area: "Cantt Bazaar",
     lat: 33.5748,
     lng: 71.4462,
@@ -141,8 +152,10 @@ export const shops: Shop[] = [
   {
     slug: "peshawar-karahi",
     name: "Peshawar Karahi Corner",
-    category: "restaurants",
-    categoryLabel: "Restaurants",
+    category: "food-drinks",
+    categoryLabel: "Food & Drinks",
+    subcategory: "restaurants",
+    subcategoryLabel: "Restaurants",
     area: "Hangu Road",
     lat: 33.5832,
     lng: 71.4188,
@@ -155,8 +168,10 @@ export const shops: Shop[] = [
   {
     slug: "smart-mobile-center",
     name: "Smart Mobile Center",
-    category: "mobile",
-    categoryLabel: "Mobile Shops",
+    category: "shopping",
+    categoryLabel: "Shopping",
+    subcategory: "mobile",
+    subcategoryLabel: "Mobile Shops",
     area: "Main Bazaar",
     lat: 33.5884,
     lng: 71.4424,
@@ -169,8 +184,10 @@ export const shops: Shop[] = [
   {
     slug: "kohat-fabric-house",
     name: "Kohat Fabric House",
-    category: "stalls",
-    categoryLabel: "Stalls",
+    category: "shopping",
+    categoryLabel: "Shopping",
+    subcategory: "clothing",
+    subcategoryLabel: "Clothing Stores",
     area: "Main Bazaar",
     lat: 33.5898,
     lng: 71.4445,
@@ -182,8 +199,10 @@ export const shops: Shop[] = [
   {
     slug: "daewoo-ticket-agent",
     name: "Daewoo Ticket Agent",
-    category: "bus",
-    categoryLabel: "Bus Tickets",
+    category: "travel",
+    categoryLabel: "Travel",
+    subcategory: "bus-tickets",
+    subcategoryLabel: "Bus Tickets",
     area: "Kachehri Road",
     lat: 33.59,
     lng: 71.4488,
@@ -195,8 +214,10 @@ export const shops: Shop[] = [
   {
     slug: "quetta-cafe",
     name: "Quetta Café",
-    category: "cafes",
-    categoryLabel: "Cafés",
+    category: "food-drinks",
+    categoryLabel: "Food & Drinks",
+    subcategory: "cafes",
+    subcategoryLabel: "Cafés",
     area: "Kachehri Road",
     lat: 33.5876,
     lng: 71.4489,
@@ -210,8 +231,10 @@ export const shops: Shop[] = [
   {
     slug: "friends-bike-workshop",
     name: "Friends Bike Workshop",
-    category: "bikes",
-    categoryLabel: "Bikes",
+    category: "vehicles",
+    categoryLabel: "Vehicles",
+    subcategory: "auto-workshops",
+    subcategoryLabel: "Auto Workshops",
     area: "Jungle Khel",
     lat: 33.6025,
     lng: 71.4613,
@@ -223,8 +246,10 @@ export const shops: Shop[] = [
   {
     slug: "madni-biryani-point",
     name: "Madni Biryani Point",
-    category: "biryani",
-    categoryLabel: "Biryani",
+    category: "food-drinks",
+    categoryLabel: "Food & Drinks",
+    subcategory: "biryani",
+    subcategoryLabel: "Biryani",
     area: "Main Bazaar",
     lat: 33.5891,
     lng: 71.4396,
@@ -236,8 +261,10 @@ export const shops: Shop[] = [
   {
     slug: "royal-furniture-mall",
     name: "Royal Furniture Mall",
-    category: "furniture",
-    categoryLabel: "Furniture",
+    category: "shopping",
+    categoryLabel: "Shopping",
+    subcategory: "furniture",
+    subcategoryLabel: "Furniture Stores",
     area: "Bannu Road",
     lat: 33.5772,
     lng: 71.4338,
@@ -249,8 +276,10 @@ export const shops: Shop[] = [
   {
     slug: "mobile-hub",
     name: "Mobile Hub",
-    category: "mobile",
-    categoryLabel: "Mobile Shops",
+    category: "shopping",
+    categoryLabel: "Shopping",
+    subcategory: "mobile",
+    subcategoryLabel: "Mobile Shops",
     area: "Cantt Bazaar",
     lat: 33.577,
     lng: 71.4461,
@@ -262,8 +291,10 @@ export const shops: Shop[] = [
   {
     slug: "afghan-tikka-house",
     name: "Afghan Tikka House",
-    category: "restaurants",
-    categoryLabel: "Restaurants",
+    category: "food-drinks",
+    categoryLabel: "Food & Drinks",
+    subcategory: "bbq",
+    subcategoryLabel: "BBQ",
     area: "Pindi Road",
     lat: 33.5917,
     lng: 71.455,
@@ -275,8 +306,10 @@ export const shops: Shop[] = [
   {
     slug: "sabzi-mandi-stall",
     name: "Sabzi Mandi Stall #14",
-    category: "stalls",
-    categoryLabel: "Stalls",
+    category: "daily-needs",
+    categoryLabel: "Daily Needs",
+    subcategory: "vegetable-shops",
+    subcategoryLabel: "Vegetable Shops",
     area: "Main Bazaar",
     lat: 33.5856,
     lng: 71.4444,
@@ -288,8 +321,10 @@ export const shops: Shop[] = [
   {
     slug: "faisal-movers-office",
     name: "Faisal Movers Office",
-    category: "bus",
-    categoryLabel: "Bus Tickets",
+    category: "travel",
+    categoryLabel: "Travel",
+    subcategory: "bus-tickets",
+    subcategoryLabel: "Bus Tickets",
     area: "KDA Chowk",
     lat: 33.5984,
     lng: 71.4548,
