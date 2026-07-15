@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { categories } from "@/data/home";
+import { mainCategories } from "@/data/categories";
 import { areas } from "@/data/shops";
 import { toast } from "sonner";
 
@@ -24,7 +24,10 @@ export const MAX_GALLERY_IMAGES = 6;
 export type ShopFormValues = {
   name: string;
   slug: string;
+  /** Main category key */
   category: string;
+  /** Sub category key */
+  subcategory: string;
   area: string;
   tagline: string;
   about: string;
