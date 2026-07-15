@@ -147,13 +147,13 @@ export function Pagination({
 
 export function FeaturedShops({
   className,
-  title = "Featured shops in Kohat",
+  title = "Featured businesses in Kohat",
   eyebrow = "Handpicked",
   description = "Local favourites worth a visit — vetted by us, loved by the city.",
   items,
   showLink = false,
   linkHref = "/shops",
-  linkLabel = "See all shops →",
+  linkLabel = "See all businesses →",
 }: {
   className?: string;
   title?: string;

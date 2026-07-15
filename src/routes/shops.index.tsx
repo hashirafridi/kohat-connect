@@ -18,28 +18,31 @@ import {
 } from "lucide-react";
 import { areas, type Shop } from "@/data/shops";
 import { useShops } from "@/hooks/use-shops";
-import { categories } from "@/data/home";
+import { mainCategories } from "@/data/categories";
 import { socials } from "@/data/home";
 import { ShopCard, Pagination, FeaturedShops } from "@/components/FeaturedShops";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
   category: fallback(z.string(), "").default(""),
+  sub: fallback(z.string(), "").default(""),
   area: fallback(z.string(), "").default(""),
   sort: fallback(z.string(), "featured").default("featured"),
 });
+
+type ShopSearch = z.infer<typeof searchSchema>;
 
 export const Route = createFileRoute("/shops/")({
   validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
-      { title: "All Shops in Kohat — Kohat Shops Directory" },
+      { title: "All Businesses in Kohat — Kohat Business Directory" },
       {
         name: "description",
         content:
-          "Browse every restaurant, café, biryani stall, bike shop, furniture store and more across Kohat.",
+          "Browse every business in Kohat — restaurants, cafés, biryani, bike shops, furniture, salons, workshops and more.",
       },
-      { property: "og:title", content: "All Shops in Kohat" },
+      { property: "og:title", content: "All Businesses in Kohat" },
       {
         property: "og:description",
         content: "The complete directory of local businesses in Kohat, KPK.",
@@ -50,7 +53,7 @@ export const Route = createFileRoute("/shops/")({
 });
 
 function ShopsPage() {
-  const { q, category, area, sort } = Route.useSearch();
+  const { q, category, sub, area, sort } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [qInput, setQInput] = useState(q);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -63,9 +66,10 @@ function ShopsPage() {
     const needle = q.trim().toLowerCase();
     let list = shops.filter((s: Shop) => {
       if (category && s.category !== category) return false;
+      if (sub && s.subcategory !== sub) return false;
       if (area && s.area !== area) return false;
       if (needle) {
-        const hay = `${s.name} ${s.categoryLabel} ${s.area} ${s.tagline}`.toLowerCase();
+        const hay = `${s.name} ${s.categoryLabel} ${s.subcategoryLabel ?? ""} ${s.area} ${s.tagline}`.toLowerCase();
         if (!hay.includes(needle)) return false;
       }
       return true;
@@ -80,20 +84,19 @@ function ShopsPage() {
       );
     }
     return list;
-  }, [q, category, area, sort, shops]);
+  }, [q, category, sub, area, sort, shops]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const start = (currentPage - 1) * PAGE_SIZE;
   const pageItems = filtered.slice(start, start + PAGE_SIZE);
 
-  // Reset to page 1 whenever filters/sort change
   useEffect(() => {
     setPage(1);
-  }, [q, category, area, sort]);
+  }, [q, category, sub, area, sort]);
 
   const activeCount =
-    (q ? 1 : 0) + (category ? 1 : 0) + (area ? 1 : 0) + (sort !== "featured" ? 1 : 0);
+    (q ? 1 : 0) + (category ? 1 : 0) + (sub ? 1 : 0) + (area ? 1 : 0) + (sort !== "featured" ? 1 : 0);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -104,7 +107,7 @@ function ShopsPage() {
         q={qInput}
         setQ={setQInput}
         onSubmit={(value) =>
-          navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, q: value }) })
+          navigate({ search: (prev: ShopSearch) => ({ ...prev, q: value }) })
         }
       />
 
@@ -114,13 +117,14 @@ function ShopsPage() {
           <aside className="hidden lg:col-span-3 lg:block">
             <Filters
               category={category}
+              sub={sub}
               area={area}
               sort={sort}
               onChange={(patch) =>
-                navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, ...patch }) })
+                navigate({ search: (prev: ShopSearch) => ({ ...prev, ...patch }) })
               }
               onClear={() =>
-                navigate({ search: () => ({ q: "", category: "", area: "", sort: "featured" }) })
+                navigate({ search: () => ({ q: "", category: "", sub: "", area: "", sort: "featured" }) })
               }
             />
           </aside>
@@ -144,9 +148,10 @@ function ShopsPage() {
                 <ActiveChips
                   q={q}
                   category={category}
+                  sub={sub}
                   area={area}
                   onClear={(key) =>
-                    navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, [key]: "" }) })
+                    navigate({ search: (prev: ShopSearch) => ({ ...prev, [key]: "" }) })
                   }
                 />
               </div>
@@ -187,7 +192,7 @@ function ShopsPage() {
                     value={sort}
                     onChange={(e) =>
                       navigate({
-                        search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, sort: e.target.value }),
+                        search: (prev: ShopSearch) => ({ ...prev, sort: e.target.value }),
                       })
                     }
                     className="rounded-sm border border-border bg-card px-2 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -255,13 +260,14 @@ function ShopsPage() {
             </div>
             <Filters
               category={category}
+              sub={sub}
               area={area}
               sort={sort}
               onChange={(patch) =>
-                navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, ...patch }) })
+                navigate({ search: (prev: ShopSearch) => ({ ...prev, ...patch }) })
               }
               onClear={() =>
-                navigate({ search: () => ({ q: "", category: "", area: "", sort: "featured" }) })
+                navigate({ search: () => ({ q: "", category: "", sub: "", area: "", sort: "featured" }) })
               }
             />
           </div>
@@ -342,7 +348,7 @@ function PageHeader({
         <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="font-display text-3xl font-semibold sm:text-4xl">
-              All shops in Kohat
+              All businesses in Kohat
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Showing <span className="font-medium text-foreground">{showing}</span> of{" "}
@@ -381,19 +387,23 @@ function PageHeader({
 
 function Filters({
   category,
+  sub,
   area,
   sort,
   onChange,
   onClear,
 }: {
   category: string;
+  sub: string;
   area: string;
   sort: string;
-  onChange: (patch: Partial<{ category: string; area: string; sort: string }>) => void;
+  onChange: (patch: Partial<{ category: string; sub: string; area: string; sort: string }>) => void;
   onClear: () => void;
 }) {
   const scrollToMap = () =>
     document.getElementById("shops-map")?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const currentMain = mainCategories.find((m) => m.key === category);
 
   return (
     <div className="space-y-8">
@@ -402,7 +412,7 @@ function Filters({
           Map
         </p>
         <p className="mt-2 text-sm text-foreground">
-          See every shop on the map with its location.
+          See every business on the map with its location.
         </p>
         <button
           onClick={scrollToMap}
@@ -418,9 +428,9 @@ function Filters({
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
             Category
           </p>
-          {category && (
+          {(category || sub) && (
             <button
-              onClick={() => onChange({ category: "" })}
+              onClick={() => onChange({ category: "", sub: "" })}
               className="text-xs text-primary hover:underline"
             >
               Clear
@@ -430,21 +440,42 @@ function Filters({
         <ul className="space-y-1">
           <li>
             <FilterRow
-              active={category === ""}
+              active={category === "" && sub === ""}
               label="All categories"
-              onClick={() => onChange({ category: "" })}
+              onClick={() => onChange({ category: "", sub: "" })}
             />
           </li>
-          {categories.map((c) => (
-            <li key={c.key}>
-              <FilterRow
-                active={category === c.key}
-                label={c.label}
-                urdu={c.urdu}
-                onClick={() => onChange({ category: c.key })}
-              />
-            </li>
-          ))}
+          {mainCategories.map((m) => {
+            const isActive = category === m.key;
+            return (
+              <li key={m.key}>
+                <FilterRow
+                  active={isActive && !sub}
+                  label={m.label}
+                  urdu={m.urdu}
+                  onClick={() =>
+                    onChange({ category: isActive ? "" : m.key, sub: "" })
+                  }
+                />
+                {isActive && (
+                  <ul className="mt-1 ml-3 space-y-0.5 border-l border-border pl-3">
+                    {m.sub.map((s) => (
+                      <li key={s.key}>
+                        <FilterRow
+                          active={sub === s.key}
+                          label={s.label}
+                          urdu={s.urdu}
+                          onClick={() =>
+                            onChange({ sub: sub === s.key ? "" : s.key })
+                          }
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
 
@@ -481,6 +512,13 @@ function Filters({
           ))}
         </ul>
       </div>
+
+      {/* subtle hint of active main when sub selected */}
+      {sub && currentMain && (
+        <p className="text-xs text-muted-foreground">
+          Filtering inside <span className="text-foreground">{currentMain.label}</span>
+        </p>
+      )}
 
       <div className="sm:hidden">
         <p className="mb-3 text-xs uppercase tracking-[0.2em] text-muted-foreground">
@@ -545,19 +583,25 @@ function FilterRow({
 function ActiveChips({
   q,
   category,
+  sub,
   area,
   onClear,
 }: {
   q: string;
   category: string;
+  sub: string;
   area: string;
-  onClear: (key: "q" | "category" | "area") => void;
+  onClear: (key: "q" | "category" | "sub" | "area") => void;
 }) {
-  const items: Array<{ key: "q" | "category" | "area"; label: string }> = [];
+  const items: Array<{ key: "q" | "category" | "sub" | "area"; label: string }> = [];
   if (q) items.push({ key: "q", label: `“${q}”` });
   if (category) {
-    const c = categories.find((x) => x.key === category);
-    items.push({ key: "category", label: c?.label ?? category });
+    const m = mainCategories.find((x) => x.key === category);
+    items.push({ key: "category", label: m?.label ?? category });
+  }
+  if (sub) {
+    const s = mainCategories.flatMap((m) => m.sub).find((x) => x.key === sub);
+    items.push({ key: "sub", label: s?.label ?? sub });
   }
   if (area) items.push({ key: "area", label: area });
   if (items.length === 0) return null;
@@ -581,13 +625,13 @@ function ActiveChips({
 function EmptyState() {
   return (
     <div className="rounded-sm border border-dashed border-border bg-card px-6 py-16 text-center">
-      <p className="font-display text-2xl font-semibold">No shops match</p>
+      <p className="font-display text-2xl font-semibold">No businesses match</p>
       <p className="mt-2 text-sm text-muted-foreground">
         Try clearing a filter or searching with a different word.
       </p>
       <Link
         to="/shops"
-        search={{ q: "", category: "", area: "", sort: "featured" }}
+        search={{ q: "", category: "", sub: "", area: "", sort: "featured" }}
         className="mt-6 inline-flex items-center gap-2 rounded-sm bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
       >
         Reset filters
@@ -611,7 +655,7 @@ function ShopRow({ shop: s }: { shop: Shop }) {
           className="aspect-[4/3] h-full w-full object-cover transition duration-700 group-hover:scale-105 sm:aspect-auto"
         />
         <span className="absolute left-3 top-3 rounded-sm bg-background/95 px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-foreground">
-          {s.categoryLabel}
+          {s.subcategoryLabel ?? s.categoryLabel}
         </span>
         {s.featured && (
           <span className="absolute right-3 top-3 rounded-sm bg-accent px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-accent-foreground">
@@ -683,7 +727,7 @@ function MapSection({ shops: list }: { shops: Shop[] }) {
               Map view
             </p>
             <h2 className="mt-2 font-display text-2xl font-semibold sm:text-3xl">
-              Every shop on the map
+              Every business on the map
             </h2>
             <p className="mt-2 max-w-xl text-sm text-muted-foreground">
               Pins reflect your current filters. Click a pin for shop details.
@@ -715,7 +759,7 @@ function MapSection({ shops: list }: { shops: Shop[] }) {
 
         {list.length === 0 && (
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            No shops match — clear a filter to see pins.
+            No businesses match — clear a filter to see pins.
           </p>
         )}
       </div>

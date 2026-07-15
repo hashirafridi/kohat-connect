@@ -51,6 +51,7 @@ function EditShopPage() {
     name: shop.name,
     slug: shop.slug,
     category: shop.category,
+    subcategory: shop.subcategory ?? "",
     area: shop.area,
     tagline: shop.tagline,
     about: shop.about ?? "",

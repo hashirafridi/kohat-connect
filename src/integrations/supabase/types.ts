@@ -69,6 +69,8 @@ export type Database = {
           name: string
           phone: string
           slug: string
+          subcategory: string | null
+          subcategory_label: string | null
           tagline: string
           updated_at: string
           website: string | null
@@ -93,6 +95,8 @@ export type Database = {
           name: string
           phone?: string
           slug: string
+          subcategory?: string | null
+          subcategory_label?: string | null
           tagline?: string
           updated_at?: string
           website?: string | null
@@ -117,6 +121,8 @@ export type Database = {
           name?: string
           phone?: string
           slug?: string
+          subcategory?: string | null
+          subcategory_label?: string | null
           tagline?: string
           updated_at?: string
           website?: string | null

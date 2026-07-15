@@ -2,7 +2,7 @@
 // nothing has been added to the DB yet.
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { categories } from "@/data/home";
+import { mainLabel, subLabel, findSubCategory } from "@/data/categories";
 import { shops as fakeShops, type Shop } from "@/data/shops";
 
 type ShopRow = Database["public"]["Tables"]["shops"]["Row"];
@@ -10,21 +10,35 @@ type CoordRow = Database["public"]["Tables"]["shop_coordinates"]["Row"];
 
 export type HoursEntry = { day: string; open: string; close?: string };
 
-function categoryLabelFor(key: string) {
-  return categories.find((c) => c.key === key)?.label ?? key;
-}
-
 function toShop(row: ShopRow, coord?: Pick<CoordRow, "lat" | "lng">): Shop {
   const hoursRaw = Array.isArray(row.hours) ? (row.hours as HoursEntry[]) : [];
   const hours = hoursRaw.map((h) => ({
     day: h.day,
     open: h.close ? `${h.open} – ${h.close}` : h.open,
   }));
+
+  // Derive main+sub. New rows store `category` = main key, `subcategory` = sub key.
+  // Older rows may have `category` set to what is really a sub-category key —
+  // fall back to inferring the main from the sub taxonomy.
+  let mainKey = row.category;
+  let mainL = row.category_label || mainLabel(row.category);
+  const subKey = row.subcategory ?? undefined;
+  const subL = row.subcategory_label ?? (subKey ? subLabel(subKey) : undefined);
+
+  const found = findSubCategory(row.category);
+  if (!subKey && found) {
+    // legacy row: category actually held a sub-category key
+    mainKey = found.main.key;
+    mainL = found.main.label;
+  }
+
   return {
     slug: row.slug,
     name: row.name,
-    category: row.category,
-    categoryLabel: row.category_label || categoryLabelFor(row.category),
+    category: mainKey,
+    categoryLabel: mainL,
+    subcategory: subKey ?? (found ? found.sub.key : undefined),
+    subcategoryLabel: subL ?? (found ? found.sub.label : undefined),
     area: row.area,
     lat: coord?.lat ?? 33.5872,
     lng: coord?.lng ?? 71.4432,
@@ -84,6 +98,5 @@ export async function fetchShopBySlugWithFallback(slug: string) {
       : data.shop_coordinates;
     return toShop(data as ShopRow, coord ?? undefined);
   }
-  // Fallback to fake data
   return fakeShops.find((s) => s.slug === slug);
 }

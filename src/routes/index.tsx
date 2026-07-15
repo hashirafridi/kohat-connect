@@ -10,13 +10,18 @@ import {
   ArrowRight,
   MapPin,
   UtensilsCrossed,
-  Flame,
-  Coffee,
-  Armchair,
-  Bike,
-  Smartphone,
+  ShoppingBag,
+  Car,
+  HeartPulse,
+  GraduationCap,
+  Landmark,
+  Plane,
+  Scissors,
+  Wrench,
   ShoppingBasket,
-  BusFront,
+  Building2,
+  Building,
+  Ticket,
   Sparkles,
   Compass,
   MousePointerClick,
@@ -25,11 +30,11 @@ import {
 import {
   heroImages,
   tagline,
-  categories,
   featuredShops,
   about,
   socials,
 } from "@/data/home";
+import { mainCategories } from "@/data/categories";
 import { FeaturedShops } from "@/components/FeaturedShops";
 import { useShops } from "@/hooks/use-shops";
 
@@ -38,14 +43,19 @@ export const Route = createFileRoute("/")({
 });
 
 const categoryIcons: Record<string, typeof UtensilsCrossed> = {
-  restaurants: UtensilsCrossed,
-  biryani: Flame,
-  cafes: Coffee,
-  furniture: Armchair,
-  bikes: Bike,
-  mobile: Smartphone,
-  stalls: ShoppingBasket,
-  bus: BusFront,
+  "food-drinks": UtensilsCrossed,
+  shopping: ShoppingBag,
+  vehicles: Car,
+  health: HeartPulse,
+  education: GraduationCap,
+  financial: Landmark,
+  travel: Plane,
+  beauty: Scissors,
+  "home-services": Wrench,
+  "daily-needs": ShoppingBasket,
+  religious: Building2,
+  government: Building,
+  entertainment: Ticket,
 };
 
 function Home() {
@@ -247,13 +257,13 @@ function CategoryChips() {
             View all categories →
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
-          {categories.map((c) => {
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7">
+          {mainCategories.map((c) => {
             const Icon = categoryIcons[c.key] ?? ShoppingBasket;
             return (
               <a
                 key={c.key}
-                href={`/shops#${c.key}`}
+                href={`/shops?category=${c.key}`}
                 className="group flex flex-col items-start gap-3 rounded-sm border border-border bg-card p-4 transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-sm"
               >
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-sm bg-secondary text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
@@ -293,12 +303,12 @@ function Featured() {
     <FeaturedShops
       className="bg-secondary/40"
       eyebrow="Handpicked this week"
-      title="Featured in Kohat"
+      title="Featured Businesses in Kohat"
       description=""
       items={items}
       showLink
       linkHref="/shops"
-      linkLabel="See all shops →"
+      linkLabel="See all businesses →"
     />
   );
 }
@@ -330,7 +340,7 @@ function RecentlyAdded() {
               Fresh on the directory
             </p>
             <h2 className="mt-1 font-display text-3xl font-semibold sm:text-4xl">
-              Recently added shops
+              Recently added businesses
             </h2>
           </div>
           <a
@@ -483,7 +493,7 @@ function AboutStrip() {
               href={`mailto:${socials.contactEmail}`}
               className="mt-5 inline-flex items-center gap-2 rounded-sm bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
             >
-              List your shop
+              List your business
               <ArrowRight className="h-4 w-4" />
             </a>
           </div>
@@ -511,8 +521,8 @@ function Footer() {
             Explore
           </p>
           <ul className="space-y-2 text-primary-foreground/80">
-            <li><a href="/shops" className="hover:text-accent">All Shops</a></li>
-            <li><a href="/shops#restaurants" className="hover:text-accent">Restaurants</a></li>
+            <li><a href="/shops" className="hover:text-accent">All Businesses</a></li>
+            <li><a href="/shops?category=food-drinks" className="hover:text-accent">Food &amp; Drinks</a></li>
             <li><a href="/about" className="hover:text-accent">About Us</a></li>
             <li><a href="/contact" className="hover:text-accent">Contact Us</a></li>
           </ul>

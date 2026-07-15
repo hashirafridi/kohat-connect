@@ -9,11 +9,20 @@ import shopMobile from "@/assets/shop-mobile.jpg";
 import shopFabric from "@/assets/shop-fabric.jpg";
 import shopBus from "@/assets/shop-bus.jpg";
 
-export type Category = {
-  key: string;
-  label: string;
-  urdu: string;
-};
+// Re-export the taxonomy from ./categories.ts. `categories` here is kept as an
+// alias for the flat list of sub-categories so older imports still work.
+export {
+  mainCategories,
+  allSubCategories as categories,
+  findMainCategory,
+  findSubCategory,
+  subLabel,
+  mainLabel,
+  BUSINESS_TERM,
+  type MainCategory,
+  type SubCategory,
+  type SubCategory as Category,
+} from "./categories";
 
 export type FeaturedShop = {
   slug: string;
@@ -32,21 +41,10 @@ export const heroImages = {
 };
 
 export const tagline = {
-  english: "Discover Shops & Restaurants in Kohat",
-  urdu: "کوہاٹ کے بازار، ایک جگہ پر",
+  english: "Discover Businesses in Kohat",
+  urdu: "کوہاٹ کے کاروبار، ایک جگہ پر",
   sub: "The complete directory of every local business — from biryani stalls to bike mechanics.",
 };
-
-export const categories: Category[] = [
-  { key: "restaurants", label: "Restaurants", urdu: "ریسٹورنٹس" },
-  { key: "biryani", label: "Biryani", urdu: "بریانی" },
-  { key: "cafes", label: "Cafés", urdu: "کیفے" },
-  { key: "furniture", label: "Furniture", urdu: "فرنیچر" },
-  { key: "bikes", label: "Bikes", urdu: "موٹرسائیکل" },
-  { key: "mobile", label: "Mobile Shops", urdu: "موبائل" },
-  { key: "stalls", label: "Stalls", urdu: "ٹھیلے" },
-  { key: "bus", label: "Bus Tickets", urdu: "بس ٹکٹ" },
-];
 
 export const featuredShops: FeaturedShop[] = [
   {
