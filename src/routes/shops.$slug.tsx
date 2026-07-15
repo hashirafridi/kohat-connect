@@ -368,8 +368,9 @@ function ShopDetailPage() {
               {shop.about}
             </p>
 
-            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
               <StatCard label="Category" value={shop.categoryLabel} />
+              <StatCard label="Sub category" value={shop.subcategoryLabel ?? "—"} />
               <StatCard label="Area" value={shop.area} />
               <StatCard label="Since" value={shop.established} />
             </div>
