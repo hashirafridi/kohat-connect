@@ -107,7 +107,7 @@ function ShopsPage() {
         q={qInput}
         setQ={setQInput}
         onSubmit={(value) =>
-          navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, q: value }) })
+          navigate({ search: (prev: ShopSearch) => ({ ...prev, q: value }) })
         }
       />
 
@@ -117,13 +117,14 @@ function ShopsPage() {
           <aside className="hidden lg:col-span-3 lg:block">
             <Filters
               category={category}
+              sub={sub}
               area={area}
               sort={sort}
               onChange={(patch) =>
-                navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, ...patch }) })
+                navigate({ search: (prev: ShopSearch) => ({ ...prev, ...patch }) })
               }
               onClear={() =>
-                navigate({ search: () => ({ q: "", category: "", area: "", sort: "featured" }) })
+                navigate({ search: () => ({ q: "", category: "", sub: "", area: "", sort: "featured" }) })
               }
             />
           </aside>
@@ -147,9 +148,10 @@ function ShopsPage() {
                 <ActiveChips
                   q={q}
                   category={category}
+                  sub={sub}
                   area={area}
                   onClear={(key) =>
-                    navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, [key]: "" }) })
+                    navigate({ search: (prev: ShopSearch) => ({ ...prev, [key]: "" }) })
                   }
                 />
               </div>
@@ -190,7 +192,7 @@ function ShopsPage() {
                     value={sort}
                     onChange={(e) =>
                       navigate({
-                        search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, sort: e.target.value }),
+                        search: (prev: ShopSearch) => ({ ...prev, sort: e.target.value }),
                       })
                     }
                     className="rounded-sm border border-border bg-card px-2 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -258,13 +260,14 @@ function ShopsPage() {
             </div>
             <Filters
               category={category}
+              sub={sub}
               area={area}
               sort={sort}
               onChange={(patch) =>
-                navigate({ search: (prev: { q: string; category: string; area: string; sort: string }) => ({ ...prev, ...patch }) })
+                navigate({ search: (prev: ShopSearch) => ({ ...prev, ...patch }) })
               }
               onClear={() =>
-                navigate({ search: () => ({ q: "", category: "", area: "", sort: "featured" }) })
+                navigate({ search: () => ({ q: "", category: "", sub: "", area: "", sort: "featured" }) })
               }
             />
           </div>
