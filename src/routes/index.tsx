@@ -10,13 +10,18 @@ import {
   ArrowRight,
   MapPin,
   UtensilsCrossed,
-  Flame,
-  Coffee,
-  Armchair,
-  Bike,
-  Smartphone,
+  ShoppingBag,
+  Car,
+  HeartPulse,
+  GraduationCap,
+  Landmark,
+  Plane,
+  Scissors,
+  Wrench,
   ShoppingBasket,
-  BusFront,
+  Building2,
+  Building,
+  Ticket,
   Sparkles,
   Compass,
   MousePointerClick,
@@ -25,11 +30,11 @@ import {
 import {
   heroImages,
   tagline,
-  categories,
   featuredShops,
   about,
   socials,
 } from "@/data/home";
+import { mainCategories } from "@/data/categories";
 import { FeaturedShops } from "@/components/FeaturedShops";
 import { useShops } from "@/hooks/use-shops";
 
@@ -38,14 +43,19 @@ export const Route = createFileRoute("/")({
 });
 
 const categoryIcons: Record<string, typeof UtensilsCrossed> = {
-  restaurants: UtensilsCrossed,
-  biryani: Flame,
-  cafes: Coffee,
-  furniture: Armchair,
-  bikes: Bike,
-  mobile: Smartphone,
-  stalls: ShoppingBasket,
-  bus: BusFront,
+  "food-drinks": UtensilsCrossed,
+  shopping: ShoppingBag,
+  vehicles: Car,
+  health: HeartPulse,
+  education: GraduationCap,
+  financial: Landmark,
+  travel: Plane,
+  beauty: Scissors,
+  "home-services": Wrench,
+  "daily-needs": ShoppingBasket,
+  religious: Building2,
+  government: Building,
+  entertainment: Ticket,
 };
 
 function Home() {
