@@ -150,6 +150,11 @@ function ShopDetailPage() {
                   <span className="rounded-sm bg-background/95 px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-foreground">
                     {shop.categoryLabel}
                   </span>
+                  {shop.subcategoryLabel && (
+                    <span className="rounded-sm bg-background/80 px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-foreground">
+                      {shop.subcategoryLabel}
+                    </span>
+                  )}
                   {shop.featured && (
                     <span className="inline-flex items-center gap-1 rounded-sm bg-accent px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-accent-foreground">
                       <BadgeCheck className="h-3 w-3" />
