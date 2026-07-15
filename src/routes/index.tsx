@@ -340,7 +340,7 @@ function RecentlyAdded() {
               Fresh on the directory
             </p>
             <h2 className="mt-1 font-display text-3xl font-semibold sm:text-4xl">
-              Recently added shops
+              Recently added businesses
             </h2>
           </div>
           <a
@@ -493,7 +493,7 @@ function AboutStrip() {
               href={`mailto:${socials.contactEmail}`}
               className="mt-5 inline-flex items-center gap-2 rounded-sm bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
             >
-              List your shop
+              List your business
               <ArrowRight className="h-4 w-4" />
             </a>
           </div>
@@ -521,8 +521,8 @@ function Footer() {
             Explore
           </p>
           <ul className="space-y-2 text-primary-foreground/80">
-            <li><a href="/shops" className="hover:text-accent">All Shops</a></li>
-            <li><a href="/shops#restaurants" className="hover:text-accent">Restaurants</a></li>
+            <li><a href="/shops" className="hover:text-accent">All Businesses</a></li>
+            <li><a href="/shops?category=food-drinks" className="hover:text-accent">Food &amp; Drinks</a></li>
             <li><a href="/about" className="hover:text-accent">About Us</a></li>
             <li><a href="/contact" className="hover:text-accent">Contact Us</a></li>
           </ul>
