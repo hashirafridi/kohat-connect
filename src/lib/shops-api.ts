@@ -3,16 +3,12 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import type { WebpImage, ShopFormValues } from "@/components/admin/ShopForm";
-import { categories } from "@/data/home";
+import { mainLabel, subLabel } from "@/data/categories";
 
 const BUCKET = "shop-images";
 
 type ShopInsert = Database["public"]["Tables"]["shops"]["Insert"];
 type ShopUpdate = Database["public"]["Tables"]["shops"]["Update"];
-
-function labelFor(key: string) {
-  return categories.find((c) => c.key === key)?.label ?? key;
-}
 
 async function uploadWebp(image: WebpImage, path: string): Promise<string> {
   if (!image.blob) {
@@ -52,7 +48,9 @@ function baseFromValues(values: ShopFormValues, coverUrl: string, galleryUrls: s
     slug: values.slug,
     name: values.name,
     category: values.category,
-    category_label: labelFor(values.category),
+    category_label: mainLabel(values.category),
+    subcategory: values.subcategory || null,
+    subcategory_label: values.subcategory ? subLabel(values.subcategory) : null,
     area: values.area,
     tagline: values.tagline,
     about: values.about || null,
