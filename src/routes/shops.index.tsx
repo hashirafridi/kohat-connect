@@ -387,19 +387,23 @@ function PageHeader({
 
 function Filters({
   category,
+  sub,
   area,
   sort,
   onChange,
   onClear,
 }: {
   category: string;
+  sub: string;
   area: string;
   sort: string;
-  onChange: (patch: Partial<{ category: string; area: string; sort: string }>) => void;
+  onChange: (patch: Partial<{ category: string; sub: string; area: string; sort: string }>) => void;
   onClear: () => void;
 }) {
   const scrollToMap = () =>
     document.getElementById("shops-map")?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const currentMain = mainCategories.find((m) => m.key === category);
 
   return (
     <div className="space-y-8">
@@ -408,7 +412,7 @@ function Filters({
           Map
         </p>
         <p className="mt-2 text-sm text-foreground">
-          See every shop on the map with its location.
+          See every business on the map with its location.
         </p>
         <button
           onClick={scrollToMap}
@@ -424,9 +428,9 @@ function Filters({
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
             Category
           </p>
-          {category && (
+          {(category || sub) && (
             <button
-              onClick={() => onChange({ category: "" })}
+              onClick={() => onChange({ category: "", sub: "" })}
               className="text-xs text-primary hover:underline"
             >
               Clear
@@ -436,21 +440,42 @@ function Filters({
         <ul className="space-y-1">
           <li>
             <FilterRow
-              active={category === ""}
+              active={category === "" && sub === ""}
               label="All categories"
-              onClick={() => onChange({ category: "" })}
+              onClick={() => onChange({ category: "", sub: "" })}
             />
           </li>
-          {categories.map((c) => (
-            <li key={c.key}>
-              <FilterRow
-                active={category === c.key}
-                label={c.label}
-                urdu={c.urdu}
-                onClick={() => onChange({ category: c.key })}
-              />
-            </li>
-          ))}
+          {mainCategories.map((m) => {
+            const isActive = category === m.key;
+            return (
+              <li key={m.key}>
+                <FilterRow
+                  active={isActive && !sub}
+                  label={m.label}
+                  urdu={m.urdu}
+                  onClick={() =>
+                    onChange({ category: isActive ? "" : m.key, sub: "" })
+                  }
+                />
+                {isActive && (
+                  <ul className="mt-1 ml-3 space-y-0.5 border-l border-border pl-3">
+                    {m.sub.map((s) => (
+                      <li key={s.key}>
+                        <FilterRow
+                          active={sub === s.key}
+                          label={s.label}
+                          urdu={s.urdu}
+                          onClick={() =>
+                            onChange({ sub: sub === s.key ? "" : s.key })
+                          }
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
 
@@ -487,6 +512,13 @@ function Filters({
           ))}
         </ul>
       </div>
+
+      {/* subtle hint of active main when sub selected */}
+      {sub && currentMain && (
+        <p className="text-xs text-muted-foreground">
+          Filtering inside <span className="text-foreground">{currentMain.label}</span>
+        </p>
+      )}
 
       <div className="sm:hidden">
         <p className="mb-3 text-xs uppercase tracking-[0.2em] text-muted-foreground">
@@ -551,19 +583,25 @@ function FilterRow({
 function ActiveChips({
   q,
   category,
+  sub,
   area,
   onClear,
 }: {
   q: string;
   category: string;
+  sub: string;
   area: string;
-  onClear: (key: "q" | "category" | "area") => void;
+  onClear: (key: "q" | "category" | "sub" | "area") => void;
 }) {
-  const items: Array<{ key: "q" | "category" | "area"; label: string }> = [];
+  const items: Array<{ key: "q" | "category" | "sub" | "area"; label: string }> = [];
   if (q) items.push({ key: "q", label: `“${q}”` });
   if (category) {
-    const c = categories.find((x) => x.key === category);
-    items.push({ key: "category", label: c?.label ?? category });
+    const m = mainCategories.find((x) => x.key === category);
+    items.push({ key: "category", label: m?.label ?? category });
+  }
+  if (sub) {
+    const s = mainCategories.flatMap((m) => m.sub).find((x) => x.key === sub);
+    items.push({ key: "sub", label: s?.label ?? sub });
   }
   if (area) items.push({ key: "area", label: area });
   if (items.length === 0) return null;
