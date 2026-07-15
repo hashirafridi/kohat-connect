@@ -126,6 +126,7 @@ export function ShopForm({ mode, initial, submitLabel, onSubmit }: Props) {
   const [name, setName] = useState(merged.name);
   const [slug, setSlug] = useState(merged.slug);
   const [category, setCategory] = useState(merged.category);
+  const [subcategory, setSubcategory] = useState(merged.subcategory);
   const [area, setArea] = useState(merged.area);
   const [tagline, setTagline] = useState(merged.tagline);
   const [about, setAbout] = useState(merged.about);
@@ -206,6 +207,7 @@ export function ShopForm({ mode, initial, submitLabel, onSubmit }: Props) {
       name,
       slug: slug || autoSlug,
       category,
+      subcategory,
       area,
       tagline,
       about,
@@ -259,15 +261,36 @@ export function ShopForm({ mode, initial, submitLabel, onSubmit }: Props) {
             />
           </div>
           <div className="space-y-1.5">
-            <Label>Category *</Label>
-            <Select value={category} onValueChange={setCategory}>
+            <Label>Main category *</Label>
+            <Select
+              value={category}
+              onValueChange={(v) => {
+                setCategory(v);
+                setSubcategory("");
+              }}
+            >
               <SelectTrigger>
-                <SelectValue placeholder="Select category" />
+                <SelectValue placeholder="Select main category" />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((c) => (
-                  <SelectItem key={c.key} value={c.key}>
-                    {c.label}
+                {mainCategories.map((m) => (
+                  <SelectItem key={m.key} value={m.key}>
+                    {m.label} — <span className="font-urdu">{m.urdu}</span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label>Sub category</Label>
+            <Select value={subcategory} onValueChange={setSubcategory} disabled={!category}>
+              <SelectTrigger>
+                <SelectValue placeholder={category ? "Select sub category" : "Pick main first"} />
+              </SelectTrigger>
+              <SelectContent>
+                {(mainCategories.find((m) => m.key === category)?.sub ?? []).map((s) => (
+                  <SelectItem key={s.key} value={s.key}>
+                    {s.label} — <span className="font-urdu">{s.urdu}</span>
                   </SelectItem>
                 ))}
               </SelectContent>
