@@ -257,13 +257,13 @@ function CategoryChips() {
             View all categories →
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
-          {categories.map((c) => {
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7">
+          {mainCategories.map((c) => {
             const Icon = categoryIcons[c.key] ?? ShoppingBasket;
             return (
               <a
                 key={c.key}
-                href={`/shops#${c.key}`}
+                href={`/shops?category=${c.key}`}
                 className="group flex flex-col items-start gap-3 rounded-sm border border-border bg-card p-4 transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-sm"
               >
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-sm bg-secondary text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
@@ -303,12 +303,12 @@ function Featured() {
     <FeaturedShops
       className="bg-secondary/40"
       eyebrow="Handpicked this week"
-      title="Featured in Kohat"
+      title="Featured Businesses in Kohat"
       description=""
       items={items}
       showLink
       linkHref="/shops"
-      linkLabel="See all shops →"
+      linkLabel="See all businesses →"
     />
   );
 }
