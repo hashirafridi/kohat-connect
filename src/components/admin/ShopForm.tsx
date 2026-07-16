@@ -234,7 +234,10 @@ export function ShopForm({ mode, initial, submitLabel, onSubmit }: Props) {
       cover,
       gallery,
       hours,
+      metaTitle,
+      metaDescription,
     };
+
     try {
       if (onSubmit) {
         await onSubmit(values);
