@@ -77,26 +77,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Kohat Shops — Discover Local Markets, Restaurants & Bazaars" },
+      { title: "Kohat Business Directory — Discover Local Shops, Restaurants & Services" },
       {
         name: "description",
         content:
-          "The complete directory of shops, restaurants, cafés and stalls across Kohat. Find WhatsApp, phone and directions for every local business.",
+          "The complete directory of businesses across Kohat — shops, restaurants, cafés and services. Find WhatsApp, phone and directions for every local business.",
       },
-      { name: "author", content: "Kohat Shops" },
-      { property: "og:title", content: "Kohat Shops — Discover Local Markets, Restaurants & Bazaars" },
-      {
-        property: "og:description",
-        content:
-          "The complete directory of shops, restaurants, cafés and stalls across Kohat. Find WhatsApp, phone and directions for every local business.",
-      },
+      { name: "author", content: "Kohat Business Directory" },
+      { property: "og:site_name", content: "Kohat Business Directory" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Kohat Shops — Discover Local Markets, Restaurants & Bazaars" },
-      { name: "twitter:description", content: "The complete directory of shops, restaurants, cafés and stalls across Kohat. Find WhatsApp, phone and directions for every local business." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0a33d00f-e0e9-4036-8253-ad47fb126f70/id-preview-8dc51192--44fad057-8b4b-4f03-8177-409a257029fc.lovable.app-1783725003615.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0a33d00f-e0e9-4036-8253-ad47fb126f70/id-preview-8dc51192--44fad057-8b4b-4f03-8177-409a257029fc.lovable.app-1783725003615.png" },
     ],
+
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
