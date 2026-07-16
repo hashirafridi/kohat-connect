@@ -45,7 +45,10 @@ export type ShopFormValues = {
   cover: WebpImage | null;
   gallery: WebpImage[];
   hours: HourRow[];
+  metaTitle: string;
+  metaDescription: string;
 };
+
 
 export const DEFAULT_HOURS: HourRow[] = [
   { day: "Monday", open: "10:00", close: "22:00" },
@@ -79,7 +82,10 @@ export const EMPTY_SHOP: ShopFormValues = {
   cover: null,
   gallery: [],
   hours: DEFAULT_HOURS,
+  metaTitle: "",
+  metaDescription: "",
 };
+
 
 async function fileToWebp(file: File, quality = 0.85): Promise<WebpImage> {
   const bitmap = await createImageBitmap(file);
@@ -144,8 +150,11 @@ export function ShopForm({ mode, initial, submitLabel, onSubmit }: Props) {
   const [cover, setCover] = useState<WebpImage | null>(merged.cover);
   const [gallery, setGallery] = useState<WebpImage[]>(merged.gallery);
   const [hours, setHours] = useState<HourRow[]>(merged.hours);
+  const [metaTitle, setMetaTitle] = useState(merged.metaTitle);
+  const [metaDescription, setMetaDescription] = useState(merged.metaDescription);
   const [converting, setConverting] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
 
   const autoSlug = useMemo(() => slugify(name), [name]);
 
@@ -225,7 +234,10 @@ export function ShopForm({ mode, initial, submitLabel, onSubmit }: Props) {
       cover,
       gallery,
       hours,
+      metaTitle,
+      metaDescription,
     };
+
     try {
       if (onSubmit) {
         await onSubmit(values);
@@ -497,6 +509,49 @@ export function ShopForm({ mode, initial, submitLabel, onSubmit }: Props) {
           {converting ? <p className="text-xs text-muted-foreground">Converting to WebP…</p> : null}
         </div>
       </section>
+
+      <section className="rounded-lg border bg-background p-6">
+        <h2 className="mb-1 text-base font-semibold">SEO</h2>
+        <p className="mb-4 text-sm text-muted-foreground">
+          Optional. If left blank, the page title falls back to the business
+          name + category + area, and the description falls back to the tagline.
+          The canonical URL is generated automatically from the slug.
+        </p>
+        <div className="grid gap-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="metaTitle">Meta title</Label>
+            <Input
+              id="metaTitle"
+              value={metaTitle}
+              onChange={(e) => setMetaTitle(e.target.value)}
+              maxLength={70}
+              placeholder="Under 60 characters is ideal"
+            />
+            <p className="text-xs text-muted-foreground">{metaTitle.length} / 70</p>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="metaDescription">Meta description</Label>
+            <Textarea
+              id="metaDescription"
+              value={metaDescription}
+              onChange={(e) => setMetaDescription(e.target.value)}
+              rows={3}
+              maxLength={180}
+              placeholder="Under 160 characters is ideal"
+            />
+            <p className="text-xs text-muted-foreground">{metaDescription.length} / 180</p>
+          </div>
+          <div className="space-y-1.5">
+            <Label>Canonical URL (auto)</Label>
+            <Input
+              readOnly
+              value={`https://kohat-connect.lovable.app/shops/${slug || autoSlug || "your-business-slug"}`}
+              className="bg-muted/40 font-mono text-xs"
+            />
+          </div>
+        </div>
+      </section>
+
 
       <div className="flex items-center justify-end gap-3">
         <Button type="submit" disabled={submitting || converting}>

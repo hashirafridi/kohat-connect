@@ -34,21 +34,27 @@ type ShopSearch = z.infer<typeof searchSchema>;
 
 export const Route = createFileRoute("/shops/")({
   validateSearch: zodValidator(searchSchema),
-  head: () => ({
-    meta: [
-      { title: "All Businesses in Kohat — Kohat Business Directory" },
-      {
-        name: "description",
-        content:
-          "Browse every business in Kohat — restaurants, cafés, biryani, bike shops, furniture, salons, workshops and more.",
-      },
-      { property: "og:title", content: "All Businesses in Kohat" },
-      {
-        property: "og:description",
-        content: "The complete directory of local businesses in Kohat, KPK.",
-      },
-    ],
-  }),
+  head: () => {
+    const url = "https://kohat-connect.lovable.app/shops";
+    const title = "All Businesses in Kohat — Kohat Business Directory";
+    const description =
+      "Browse every business in Kohat — restaurants, cafés, biryani, bike shops, furniture, salons, workshops and more. Contact owners directly on WhatsApp or phone.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
+
   component: ShopsPage,
 });
 
