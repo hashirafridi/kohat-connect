@@ -56,8 +56,11 @@ function toShop(row: ShopRow, coord?: Pick<CoordRow, "lat" | "lng">): Shop {
     hours: hours.length ? hours : undefined,
     gallery: row.gallery && row.gallery.length ? row.gallery : undefined,
     about: row.about ?? undefined,
+    metaTitle: row.meta_title ?? undefined,
+    metaDescription: row.meta_description ?? undefined,
   };
 }
+
 
 export async function fetchShopsWithFallback(): Promise<{
   shops: Shop[];

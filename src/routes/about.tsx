@@ -3,24 +3,29 @@ import { ArrowRight, Compass, Heart, Users } from "lucide-react";
 import { socials, about } from "@/data/home";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About — Kohat Shops" },
-      {
-        name: "description",
-        content:
-          "Kohat Shops is a free community directory of every shop, café and stall across Kohat, KPK — built to help buyers reach local businesses directly.",
-      },
-      { property: "og:title", content: "About — Kohat Shops" },
-      {
-        property: "og:description",
-        content:
-          "A community directory for every shop, café and stall across Kohat.",
-      },
-    ],
-  }),
+  head: () => {
+    const url = "https://kohat-connect.lovable.app/about";
+    const title = "About — Kohat Business Directory";
+    const description =
+      "Kohat Business Directory is a free community listing of every shop, café, workshop and service across Kohat, KPK — built to help buyers reach local businesses directly.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: AboutPage,
 });
+
 
 function AboutPage() {
   return (

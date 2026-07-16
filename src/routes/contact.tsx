@@ -4,23 +4,29 @@ import { Mail, Phone, MessageCircle, Send, CheckCircle2 } from "lucide-react";
 import { socials } from "@/data/home";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact — Kohat Shops" },
-      {
-        name: "description",
-        content:
-          "Get in touch with Kohat Shops on WhatsApp, phone or email. List your shop or send us a message using the form.",
-      },
-      { property: "og:title", content: "Contact — Kohat Shops" },
-      {
-        property: "og:description",
-        content: "Reach the Kohat Shops team on WhatsApp, phone or email.",
-      },
-    ],
-  }),
+  head: () => {
+    const url = "https://kohat-connect.lovable.app/contact";
+    const title = "Contact — Kohat Business Directory";
+    const description =
+      "Get in touch with Kohat Business Directory on WhatsApp, phone or email. List your business or send us a message using the form.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
   component: ContactPage,
 });
+
 
 function WhatsAppLogo({ className }: { className?: string }) {
   return (

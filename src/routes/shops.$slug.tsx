@@ -27,28 +27,41 @@ export const Route = createFileRoute("/shops/$slug")({
     if (!shop) throw notFound();
     return { shop: enrichShop(shop) };
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
+    const canonical = `https://kohat-connect.lovable.app/shops/${params.slug}`;
     if (!loaderData) {
       return {
         meta: [
           { title: "Business not found — Kohat Business Directory" },
           { name: "robots", content: "noindex" },
         ],
+        links: [{ rel: "canonical", href: canonical }],
       };
     }
     const { shop } = loaderData;
-    const title = `${shop.name} — ${shop.subcategoryLabel ?? shop.categoryLabel} in ${shop.area}, Kohat`;
-    const description = `${shop.tagline} Contact ${shop.name} on ${shop.area}, Kohat.`;
+    const autoTitle = `${shop.name} — ${shop.subcategoryLabel ?? shop.categoryLabel} in ${shop.area}, Kohat`;
+    const autoDesc = `${shop.tagline} Contact ${shop.name} in ${shop.area}, Kohat directly on WhatsApp or phone.`;
+    const title = shop.metaTitle?.trim() || autoTitle;
+    const description = shop.metaDescription?.trim() || autoDesc;
+    const image = shop.image;
     return {
       meta: [
         { title },
         { name: "description", content: description },
-        { property: "og:title", content: shop.name },
+        { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "business.business" },
+        { property: "og:url", content: canonical },
+        ...(image ? [{ property: "og:image", content: image } as const] : []),
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        ...(image ? [{ name: "twitter:image", content: image } as const] : []),
       ],
+      links: [{ rel: "canonical", href: canonical }],
     };
   },
+
   notFoundComponent: ShopNotFound,
   errorComponent: ({ error }) => (
     <div className="mx-auto max-w-xl px-6 py-24 text-center">

@@ -66,8 +66,11 @@ function baseFromValues(values: ShopFormValues, coverUrl: string, galleryUrls: s
     cover_image: coverUrl,
     gallery: galleryUrls,
     hours: values.hours,
+    meta_title: values.metaTitle?.trim() || null,
+    meta_description: values.metaDescription?.trim() || null,
   };
 }
+
 
 export async function createShop(values: ShopFormValues) {
   const slug = values.slug.trim();

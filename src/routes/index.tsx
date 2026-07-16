@@ -38,9 +38,45 @@ import { mainCategories } from "@/data/categories";
 import { FeaturedShops } from "@/components/FeaturedShops";
 import { useShops } from "@/hooks/use-shops";
 
+const HOME_TITLE = "Kohat Business Directory — Local Shops, Restaurants & Services";
+const HOME_DESC =
+  "Discover every business in Kohat — restaurants, cafés, biryani spots, bike shops, salons, tailors, workshops and more. Contact owners directly on WhatsApp or phone.";
+const HOME_URL = "https://kohat-connect.lovable.app/";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: HOME_TITLE },
+      { name: "description", content: HOME_DESC },
+      { property: "og:title", content: HOME_TITLE },
+      { property: "og:description", content: HOME_DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: HOME_URL },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: HOME_TITLE },
+      { name: "twitter:description", content: HOME_DESC },
+    ],
+    links: [{ rel: "canonical", href: HOME_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Kohat Business Directory",
+          url: HOME_URL,
+          potentialAction: {
+            "@type": "SearchAction",
+            target: `${HOME_URL}shops?q={query}`,
+            "query-input": "required name=query",
+          },
+        }),
+      },
+    ],
+  }),
   component: Home,
 });
+
 
 const categoryIcons: Record<string, typeof UtensilsCrossed> = {
   "food-drinks": UtensilsCrossed,

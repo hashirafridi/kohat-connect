@@ -72,7 +72,10 @@ function EditShopPage() {
       dataUrl: src,
     })),
     hours: parseHoursForForm(shop.hours),
+    metaTitle: shop.metaTitle ?? "",
+    metaDescription: shop.metaDescription ?? "",
   };
+
 
   async function handleSubmit(values: ShopFormValues) {
     try {

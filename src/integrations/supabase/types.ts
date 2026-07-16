@@ -66,6 +66,8 @@ export type Database = {
           hours: Json
           id: string
           instagram: string | null
+          meta_description: string | null
+          meta_title: string | null
           name: string
           phone: string
           slug: string
@@ -92,6 +94,8 @@ export type Database = {
           hours?: Json
           id?: string
           instagram?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
           name: string
           phone?: string
           slug: string
@@ -118,6 +122,8 @@ export type Database = {
           hours?: Json
           id?: string
           instagram?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
           name?: string
           phone?: string
           slug?: string
