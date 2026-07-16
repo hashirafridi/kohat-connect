@@ -37,7 +37,12 @@ export type Shop = {
   facebook?: string;
   instagram?: string;
   website?: string;
+  /** Optional SEO override — falls back to auto-generated title. */
+  metaTitle?: string;
+  /** Optional SEO override — falls back to tagline. */
+  metaDescription?: string;
 };
+
 
 export function enrichShop(shop: Shop) {
   const gallery = shop.gallery ?? [
