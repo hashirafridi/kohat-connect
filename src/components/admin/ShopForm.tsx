@@ -150,8 +150,11 @@ export function ShopForm({ mode, initial, submitLabel, onSubmit }: Props) {
   const [cover, setCover] = useState<WebpImage | null>(merged.cover);
   const [gallery, setGallery] = useState<WebpImage[]>(merged.gallery);
   const [hours, setHours] = useState<HourRow[]>(merged.hours);
+  const [metaTitle, setMetaTitle] = useState(merged.metaTitle);
+  const [metaDescription, setMetaDescription] = useState(merged.metaDescription);
   const [converting, setConverting] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
 
   const autoSlug = useMemo(() => slugify(name), [name]);
 
