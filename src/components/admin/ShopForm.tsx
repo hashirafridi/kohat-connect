@@ -45,7 +45,10 @@ export type ShopFormValues = {
   cover: WebpImage | null;
   gallery: WebpImage[];
   hours: HourRow[];
+  metaTitle: string;
+  metaDescription: string;
 };
+
 
 export const DEFAULT_HOURS: HourRow[] = [
   { day: "Monday", open: "10:00", close: "22:00" },
