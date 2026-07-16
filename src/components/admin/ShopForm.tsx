@@ -82,7 +82,10 @@ export const EMPTY_SHOP: ShopFormValues = {
   cover: null,
   gallery: [],
   hours: DEFAULT_HOURS,
+  metaTitle: "",
+  metaDescription: "",
 };
+
 
 async function fileToWebp(file: File, quality = 0.85): Promise<WebpImage> {
   const bitmap = await createImageBitmap(file);
